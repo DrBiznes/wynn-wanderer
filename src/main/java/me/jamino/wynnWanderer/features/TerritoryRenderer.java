@@ -28,10 +28,20 @@ public class TerritoryRenderer {
     public int textXOffset = 0;
     public boolean centerText = true;
 
-    // New subtitle positioning properties
+    // Subtitle positioning properties
     public int subtitleYOffset = -20;
     public int subtitleXOffset = 0;
     public double subtitleSize = 1.3;
+
+    // Significant territory settings
+    public boolean useEnhancedStyling = true;
+    public double titleSizeMultiplier = 1.2;
+    public double subtitleSizeMultiplier = 1.1;
+    public boolean useCustomColors = true;
+    public String defaultSignificantColor = "ffcc00";
+
+    // Current rendering mode flag
+    private boolean isRenderingSignificantTerritory = false;
 
     /**
      * Sets the color of text to render
@@ -46,6 +56,13 @@ public class TerritoryRenderer {
             System.err.println("Text color '" + textColor + "' is not a valid hex color (e.g., 'ffffff'). Defaulting to white...");
             this.titleTextColor = 0xFFFFFF; // Default to white
         }
+    }
+
+    /**
+     * Sets whether the current rendering is for a significant territory
+     */
+    public void setSignificantTerritoryMode(boolean isSignificant) {
+        this.isRenderingSignificantTerritory = isSignificant;
     }
 
     /**
@@ -68,9 +85,6 @@ public class TerritoryRenderer {
         // Fade-in phase
         if (age > textFadeOutTime + textDisplayTime) {
             // Calculate progress through fade-in phase
-            // Total duration of fade-in = textFadeInTime
-            // Time elapsed in fade-in = (Total Title Time) - age - (Display Time) - (Fade Out Time)
-            // Simplified: Time into fade-in = textFadeInTime - (age - (textDisplayTime + textFadeOutTime))
             float fadeInProgress = (float)textFadeInTime - (age - (textDisplayTime + textFadeOutTime));
             if (textFadeInTime > 0) { // Avoid division by zero
                 opacity = (int) (MathHelper.clamp(fadeInProgress, 0, textFadeInTime) * 255.0F / (float) textFadeInTime);
@@ -116,7 +130,13 @@ public class TerritoryRenderer {
             drawContext.getMatrices().translate(textXOffset, textYOffset, 0);
         }
 
-        drawContext.getMatrices().scale((float)textSize, (float)textSize, (float)textSize);
+        // Apply size, with multiplier for significant territories if enabled
+        float actualTitleSize = (float)textSize;
+        if (isRenderingSignificantTerritory && useEnhancedStyling) {
+            actualTitleSize *= (float)titleSizeMultiplier;
+        }
+
+        drawContext.getMatrices().scale(actualTitleSize, actualTitleSize, actualTitleSize);
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -154,8 +174,14 @@ public class TerritoryRenderer {
                 drawContext.getMatrices().translate(subtitleXOffset, subtitleYOffset, 0);
             }
 
+            // Apply subtitle size, with multiplier for significant territories if enabled
+            float actualSubtitleSize = (float)subtitleSize;
+            if (isRenderingSignificantTerritory && useEnhancedStyling) {
+                actualSubtitleSize *= (float)subtitleSizeMultiplier;
+            }
+
             // Use subtitle scale
-            drawContext.getMatrices().scale((float)subtitleSize, (float)subtitleSize, (float)subtitleSize);
+            drawContext.getMatrices().scale(actualSubtitleSize, actualSubtitleSize, actualSubtitleSize);
 
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
@@ -192,10 +218,11 @@ public class TerritoryRenderer {
         if (titleTimer > 0) {
             --titleTimer;
             if (titleTimer <= 0) {
-                // Only clear display variables, timer is handled in tickTitle
+                // Only clear display variables
                 displayedTitle = null;
                 displayedSubTitle = null;
-                // Do not reset titleTimer here, tickTitle handles reaching 0
+                // Reset significant territory flag
+                isRenderingSignificantTerritory = false;
             }
         }
     }
@@ -204,9 +231,8 @@ public class TerritoryRenderer {
      * Clears the current title display
      */
     public void clearTimer() {
-        // Only clear display variables, timer is handled in tickTitle
         displayedTitle = null;
         displayedSubTitle = null;
-        // Do not reset titleTimer here, tickTitle handles reaching 0
+        isRenderingSignificantTerritory = false;
     }
 }

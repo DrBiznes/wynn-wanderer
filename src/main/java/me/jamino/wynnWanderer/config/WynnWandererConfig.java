@@ -40,7 +40,7 @@ public class WynnWandererConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip(count = 3)
         public int textXOffset = 0;
 
-        // New subtitle positioning settings
+        // Subtitle positioning settings
         @ConfigEntry.Gui.Tooltip(count = 3)
         public int subtitleYOffset = -20; // Default position for subtitle
 
@@ -50,10 +50,32 @@ public class WynnWandererConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         public double subtitleSize = 1.3; // Smaller scale for subtitle
 
+        // Significant territory settings
+        @ConfigEntry.Gui.CollapsibleObject
+        @ConfigEntry.Gui.Tooltip
+        public SignificantTerritoryConfig significantTerritories = new SignificantTerritoryConfig();
+
         @ConfigEntry.Gui.Tooltip(count = 3)
         public boolean centerText = true;
 
         @ConfigEntry.Gui.Tooltip(count = 3)
         public int recentTerritoryCacheSize = 3;
+
+        public static class SignificantTerritoryConfig {
+            @ConfigEntry.Gui.Tooltip
+            public boolean useEnhancedStyling = true;
+
+            @ConfigEntry.Gui.Tooltip
+            public double titleSizeMultiplier = 1.2; // Makes significant territory titles slightly larger
+
+            @ConfigEntry.Gui.Tooltip
+            public double subtitleSizeMultiplier = 1.1; // Makes significant territory subtitles slightly larger
+
+            @ConfigEntry.Gui.Tooltip(count = 2)
+            public boolean useCustomColors = true; // Whether to use colors defined in lang files
+
+            @ConfigEntry.Gui.Tooltip
+            public String defaultColor = "ffcc00"; // Default gold color for significant territories
+        }
     }
 }

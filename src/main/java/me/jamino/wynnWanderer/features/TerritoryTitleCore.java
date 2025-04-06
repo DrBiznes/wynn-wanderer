@@ -85,6 +85,11 @@ public class TerritoryTitleCore {
             int subtitleXOffset,
             int subtitleYOffset,
             double subtitleSize,
+            boolean useEnhancedStyling,
+            double titleSizeMultiplier,
+            double subtitleSizeMultiplier,
+            boolean useCustomColors,
+            String defaultSignificantColor,
             boolean centerText,
             int cacheSize
     ) {
@@ -103,6 +108,11 @@ public class TerritoryTitleCore {
         territoryRenderer.subtitleXOffset = subtitleXOffset;
         territoryRenderer.subtitleYOffset = subtitleYOffset;
         territoryRenderer.subtitleSize = subtitleSize;
+        territoryRenderer.useEnhancedStyling = useEnhancedStyling;
+        territoryRenderer.titleSizeMultiplier = titleSizeMultiplier;
+        territoryRenderer.subtitleSizeMultiplier = subtitleSizeMultiplier;
+        territoryRenderer.useCustomColors = useCustomColors;
+        territoryRenderer.defaultSignificantColor = defaultSignificantColor;
         territoryRenderer.centerText = centerText;
         this.recentTerritoryCacheSize = cacheSize;
 
@@ -150,8 +160,6 @@ public class TerritoryTitleCore {
             }
         } catch (Exception e) {
             System.err.println("Error checking territory: " + e.getMessage());
-            // Consider more specific error handling or logging if needed
-            // e.printStackTrace(); // Optional: uncomment for detailed stack trace during debugging
         }
     }
 
@@ -160,6 +168,9 @@ public class TerritoryTitleCore {
         boolean isSignificantTerritory = SignificantTerritoryManager.SIGNIFICANT_TERRITORIES.contains(territoryName);
         Text title;
         Text subtitle = null;
+
+        // Set the rendering mode for significant territories
+        territoryRenderer.setSignificantTerritoryMode(isSignificantTerritory);
 
         if (isSignificantTerritory) {
             // Create territory-specific key for custom styling
@@ -177,19 +188,31 @@ public class TerritoryTitleCore {
             subtitle = Text.translatable(subtitleKey);
 
             // Try to get custom color from config or fallback
-            try {
-                // Try to see if the client can render the color key
-                Text colorText = Text.translatable(colorKey);
-                String colorString = colorText.getString();
-                // If we get something that looks like a color (hex digits), use it
-                if (colorString.matches("[0-9A-Fa-f]{6}")) {
-                    territoryRenderer.setColor(colorString);
-                } else {
-                    // Fallback to default
-                    territoryRenderer.setColor(territoryRenderer.textColor);
+            if (territoryRenderer.useCustomColors) {
+                try {
+                    // Try to see if the client can render the color key
+                    Text colorText = Text.translatable(colorKey);
+                    String colorString = colorText.getString();
+                    // If we get something that looks like a color (hex digits), use it
+                    if (colorString.matches("[0-9A-Fa-f]{6}")) {
+                        territoryRenderer.setColor(colorString);
+                    } else if (territoryRenderer.useEnhancedStyling) {
+                        // Fallback to default significant color
+                        territoryRenderer.setColor(territoryRenderer.defaultSignificantColor);
+                    } else {
+                        // Fallback to regular color
+                        territoryRenderer.setColor(territoryRenderer.textColor);
+                    }
+                } catch (Exception e) {
+                    // If there's any error, use appropriate fallback
+                    if (territoryRenderer.useEnhancedStyling) {
+                        territoryRenderer.setColor(territoryRenderer.defaultSignificantColor);
+                    } else {
+                        territoryRenderer.setColor(territoryRenderer.textColor);
+                    }
                 }
-            } catch (Exception e) {
-                // If there's any error, use the default color
+            } else {
+                // If not using custom colors, use regular color
                 territoryRenderer.setColor(territoryRenderer.textColor);
             }
 

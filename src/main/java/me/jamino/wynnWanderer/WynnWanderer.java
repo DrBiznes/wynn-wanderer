@@ -39,6 +39,7 @@ public class WynnWanderer implements ClientModInitializer {
 
     private void applyConfigToTerritoryTitleCore() {
         WynnWandererConfig.TerritoryTitlesConfig ttConfig = config.territoryTitles;
+        WynnWandererConfig.TerritoryTitlesConfig.SignificantTerritoryConfig stConfig = ttConfig.significantTerritories;
 
         territoryTitleCore.updateSettings(
                 ttConfig.enabled,
@@ -54,6 +55,11 @@ public class WynnWanderer implements ClientModInitializer {
                 ttConfig.subtitleXOffset,
                 ttConfig.subtitleYOffset,
                 ttConfig.subtitleSize,
+                stConfig.useEnhancedStyling,
+                stConfig.titleSizeMultiplier,
+                stConfig.subtitleSizeMultiplier,
+                stConfig.useCustomColors,
+                stConfig.defaultColor,
                 ttConfig.centerText,
                 ttConfig.recentTerritoryCacheSize
         );
