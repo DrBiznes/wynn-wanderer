@@ -12,10 +12,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-// Import RenderTickCounter if needed, though it's implicitly used in the lambda
-// import net.minecraft.client.render.RenderTickCounter;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 import java.util.function.Predicate;
 
 public class TerritoryTitleCore {
@@ -23,6 +24,13 @@ public class TerritoryTitleCore {
     private static final int CHECK_INTERVAL_TICKS = 10;
     private int tickCounter = 0;
     private boolean isEnabled = true;
+
+    // List of significant cities/territories for special styling
+    private static final Set<String> SIGNIFICANT_TERRITORIES = new HashSet<>(Arrays.asList(
+            "Llevigar", "Gelibord", "Olux", "Rodoroc", "Eltom", "Cinfras", "Ahmsord",
+            "Kandon-Beda", "Thesead", "Corkus City", "Selchar", "Nemract", "Almuj",
+            "Ragni", "Detlas", "Lutho", "Nesaak", "Troms"
+    ));
 
     // Configuration properties
     public boolean enabled = true;
@@ -73,9 +81,9 @@ public class TerritoryTitleCore {
         });
 
         // Register HUD render event
-        HudRenderCallback.EVENT.register((drawContext, renderTickCounter) -> { // Changed variable name for clarity
-            // Pass the float delta time to renderTitle
-            renderTitle(drawContext, renderTickCounter.getTickDelta(false)); // <<< FIX 1 APPLIED HERE
+        HudRenderCallback.EVENT.register((drawContext, renderTickCounter) -> {
+            // Pass the float delta time to renderTitle - using the getTickDelta method
+            renderTitle(drawContext, renderTickCounter.getTickDelta(false));
         });
     }
 
@@ -146,7 +154,7 @@ public class TerritoryTitleCore {
                 String territoryName = currentTerritory.getFriendlyName();
                 // Only display if the name is not null or empty
                 if (territoryName != null && !territoryName.isEmpty()) {
-                    displayTerritoryTitle(territoryName);
+                    displayTerritoryTitle(territoryName, currentTerritory);
 
                     // Update last territory and add to recent entries
                     lastTerritoryProfile = currentTerritory;
@@ -167,10 +175,59 @@ public class TerritoryTitleCore {
         }
     }
 
-    private void displayTerritoryTitle(String territoryName) {
-        // Create the title and subtitle components with translation keys
-        Text title = Text.translatable("wynn_wanderer.territory.entering.title", territoryName);
-        Text subtitle = Text.translatable("wynn_wanderer.territory.entering.subtitle");
+    private void displayTerritoryTitle(String territoryName, TerritoryProfile territory) {
+        // Check if this is a significant territory for special styling
+        boolean isSignificantTerritory = SIGNIFICANT_TERRITORIES.contains(territoryName);
+        Text title;
+        Text subtitle = null;
+
+        if (isSignificantTerritory) {
+            // Create territory-specific key for custom styling
+            String sanitizedName = territoryName.toLowerCase().replace(" ", "_");
+
+            // Create translation keys based on territory name
+            String titleKey = "wynn_wanderer.territory." + sanitizedName + ".title";
+            String subtitleKey = "wynn_wanderer.territory." + sanitizedName + ".subtitle";
+            String colorKey = "wynn_wanderer.territory." + sanitizedName + ".color";
+
+            // Create the title with the specific key
+            title = Text.translatable(titleKey);
+
+            // Create the subtitle with the specific key
+            subtitle = Text.translatable(subtitleKey);
+
+            // Try to get custom color from config or fallback
+            try {
+                // Try to see if the client can render the color key
+                Text colorText = Text.translatable(colorKey);
+                String colorString = colorText.getString();
+                // If we get something that looks like a color (hex digits), use it
+                if (colorString.matches("[0-9A-Fa-f]{6}")) {
+                    setTextColor(colorString);
+                } else {
+                    // Fallback to default
+                    setTextColor(textColor);
+                }
+            } catch (Exception e) {
+                // If there's any error, use the default color
+                setTextColor(textColor);
+            }
+
+            // If we're unable to find translations, fall back to the significant format
+            // We can check if the rendered text equals the raw key as a heuristic
+            if (title.getString().equals(titleKey)) {
+                title = Text.translatable("wynn_wanderer.territory.significant.title", territoryName);
+            }
+
+            if (subtitle.getString().equals(subtitleKey)) {
+                subtitle = Text.translatable("wynn_wanderer.territory.significant.subtitle");
+            }
+        } else {
+            // For regular territories, use the generic "Entering X" title
+            title = Text.translatable("wynn_wanderer.territory.entering.title", territoryName);
+            subtitle = Text.translatable("wynn_wanderer.territory.entering.subtitle");
+            setTextColor(textColor); // Use default color
+        }
 
         // Start displaying the title
         displayedTitle = title;
@@ -207,7 +264,7 @@ public class TerritoryTitleCore {
 
         MinecraftClient mc = MinecraftClient.getInstance();
         // Check if debug screen is visible
-        if (mc.getDebugHud().shouldShowDebugHud()) return; // <<< FIX 2 APPLIED HERE
+        if (mc.getDebugHud().shouldShowDebugHud()) return;
 
         // Calculate fade opacity
         float age = (float) titleTimer - partialTicks; // Calculate remaining time precisely

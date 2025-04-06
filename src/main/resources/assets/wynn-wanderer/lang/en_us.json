@@ -39,5 +39,24 @@
   "text.autoconfig.wynn-wanderer.option.territoryTitles.recentTerritoryCacheSize.@Tooltip[2]": "the same few territories",
 
   "wynn_wanderer.territory.entering.title": "Entering %s",
-  "wynn_wanderer.territory.entering.subtitle": ""
+  "wynn_wanderer.territory.entering.subtitle": "",
+
+  "wynn_wanderer.territory.significant.title": "The City of %s",
+  "wynn_wanderer.territory.significant.subtitle": "A major settlement",
+
+  "wynn_wanderer.territory.ragni.title": "Ragni",
+  "wynn_wanderer.territory.ragni.subtitle": "Capital of Wynn Province",
+  "wynn_wanderer.territory.ragni.color": "336699",
+
+  "wynn_wanderer.territory.detlas.title": "Detlas",
+  "wynn_wanderer.territory.detlas.subtitle": "Trading Hub of Wynn",
+  "wynn_wanderer.territory.detlas.color": "669933",
+
+  "wynn_wanderer.territory.almuj.title": "Al'Muaj",
+  "wynn_wanderer.territory.almuj.subtitle": "Desert City of Merchants",
+  "wynn_wanderer.territory.almuj.color": "cc9966",
+
+  "wynn_wanderer.territory.llevigar.title": "Llevigar",
+  "wynn_wanderer.territory.llevigar.subtitle": "Gateway to Gavel",
+  "wynn_wanderer.territory.llevigar.color": "996633"
 }
