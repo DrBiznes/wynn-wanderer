@@ -12,6 +12,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+// Import RenderTickCounter if needed, though it's implicitly used in the lambda
+// import net.minecraft.client.render.RenderTickCounter;
 
 import java.util.LinkedList;
 import java.util.function.Predicate;
@@ -51,9 +53,11 @@ public class TerritoryTitleCore {
 
             // Only run when on Wynncraft world
             try {
-                if (!Models.WorldState.onWorld()) return;
+                // Ensure player and world state are available before checking
+                if (client.player == null || !Models.WorldState.onWorld()) return;
             } catch (Exception e) {
-                // Wynntils might not be loaded yet
+                // Wynntils might not be loaded yet or world state check failed
+                System.err.println("Error checking world state (Wynntils might be initializing): " + e.getMessage());
                 return;
             }
 
@@ -69,8 +73,9 @@ public class TerritoryTitleCore {
         });
 
         // Register HUD render event
-        HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
-            renderTitle(drawContext, tickDelta);
+        HudRenderCallback.EVENT.register((drawContext, renderTickCounter) -> { // Changed variable name for clarity
+            // Pass the float delta time to renderTitle
+            renderTitle(drawContext, renderTickCounter.getTickDelta(false)); // <<< FIX 1 APPLIED HERE
         });
     }
 
@@ -112,9 +117,15 @@ public class TerritoryTitleCore {
         this.textYOffset = yOffset;
         this.centerText = centerText;
         this.recentTerritoryCacheSize = cacheSize;
+
+        // Ensure the recent entries list respects the new cache size immediately
+        while (recentEntries.size() > this.recentTerritoryCacheSize && !recentEntries.isEmpty()) {
+            recentEntries.removeFirst();
+        }
     }
 
     private void checkTerritory() {
+        // Player null check already happened in tick event, but good practice to keep redundancy
         if (McUtils.player() == null) return;
 
         try {
@@ -133,18 +144,26 @@ public class TerritoryTitleCore {
                 }
 
                 String territoryName = currentTerritory.getFriendlyName();
-                displayTerritoryTitle(territoryName);
+                // Only display if the name is not null or empty
+                if (territoryName != null && !territoryName.isEmpty()) {
+                    displayTerritoryTitle(territoryName);
 
-                // Update last territory and add to recent entries
-                lastTerritoryProfile = currentTerritory;
-                addRecentEntry(currentTerritory);
+                    // Update last territory and add to recent entries
+                    lastTerritoryProfile = currentTerritory;
+                    addRecentEntry(currentTerritory);
+                } else {
+                    // Territory exists but has no friendly name, treat as leaving territory for display purposes
+                    lastTerritoryProfile = null;
+                }
+
             } else if (currentTerritory == null && lastTerritoryProfile != null) {
                 // Player left a territory and is not in a new one
                 lastTerritoryProfile = null;
             }
         } catch (Exception e) {
             System.err.println("Error checking territory: " + e.getMessage());
-            e.printStackTrace();
+            // Consider more specific error handling or logging if needed
+            // e.printStackTrace(); // Optional: uncomment for detailed stack trace during debugging
         }
     }
 
@@ -157,45 +176,69 @@ public class TerritoryTitleCore {
         displayedTitle = title;
         displayedSubTitle = subtitle;
         titleTimer = textFadeInTime + textDisplayTime + textFadeOutTime;
-        cooldownTimer = textCooldownTime;
+        cooldownTimer = textCooldownTime; // Start cooldown immediately upon display
     }
 
     private void tickTitle() {
+        // Tick down cooldown regardless of title display
+        if (cooldownTimer > 0) {
+            --cooldownTimer;
+        }
+
+        // Tick down title timer only if a title is active
         if (titleTimer > 0) {
             --titleTimer;
             if (titleTimer <= 0) {
                 clearTitle();
+                // Cooldown continues independently
             }
-        }
-        if (cooldownTimer > 0) {
-            --cooldownTimer;
         }
     }
 
     private void clearTitle() {
-        titleTimer = 0;
+        // Only clear display variables, timer is handled in tickTitle
         displayedTitle = null;
         displayedSubTitle = null;
+        // Do not reset titleTimer here, tickTitle handles reaching 0
     }
 
     private void renderTitle(DrawContext drawContext, float partialTicks) {
         if (!isEnabled || displayedTitle == null || titleTimer <= 0) return;
 
         MinecraftClient mc = MinecraftClient.getInstance();
-        if (mc.options.debugEnabled) return;  // Use field instead of method
+        // Check if debug screen is visible
+        if (mc.getDebugHud().shouldShowDebugHud()) return; // <<< FIX 2 APPLIED HERE
 
         // Calculate fade opacity
-        float age = (float) titleTimer - partialTicks;
-        int opacity = 255;
+        float age = (float) titleTimer - partialTicks; // Calculate remaining time precisely
+        int opacity = 255; // Default to fully opaque (during display phase)
 
-        if (titleTimer > textFadeOutTime + textDisplayTime) {
-            float fadeIn = (float) (textFadeInTime + textDisplayTime + textFadeOutTime) - age;
-            opacity = (int) (fadeIn * 255.0F / (float) textFadeInTime);
-        } else if (titleTimer <= textFadeOutTime) {
-            opacity = (int) (age * 255.0F / (float) textFadeOutTime);
+        // Fade-in phase
+        if (age > textFadeOutTime + textDisplayTime) {
+            // Calculate progress through fade-in phase
+            // Total duration of fade-in = textFadeInTime
+            // Time elapsed in fade-in = (Total Title Time) - age - (Display Time) - (Fade Out Time)
+            // Simplified: Time into fade-in = textFadeInTime - (age - (textDisplayTime + textFadeOutTime))
+            float fadeInProgress = (float)textFadeInTime - (age - (textDisplayTime + textFadeOutTime));
+            if (textFadeInTime > 0) { // Avoid division by zero
+                opacity = (int) (MathHelper.clamp(fadeInProgress, 0, textFadeInTime) * 255.0F / (float) textFadeInTime);
+            } else {
+                opacity = 255; // Instant fade-in if time is 0
+            }
         }
+        // Fade-out phase
+        else if (age <= textFadeOutTime) {
+            // Calculate progress through fade-out phase (age is time remaining in fade-out)
+            if (textFadeOutTime > 0) { // Avoid division by zero
+                opacity = (int) (MathHelper.clamp(age, 0, textFadeOutTime) * 255.0F / (float) textFadeOutTime);
+            } else {
+                opacity = 0; // Instant fade-out if time is 0
+            }
+        }
+        // Display phase: opacity remains 255
 
         opacity = MathHelper.clamp(opacity, 0, 255);
+        // Don't render if almost fully transparent
         if (opacity < 8) return;
 
         // Set up rendering state
@@ -203,85 +246,102 @@ public class TerritoryTitleCore {
 
         // Center the title if enabled
         if (centerText) {
+            // Translate to the center of the screen, then apply offsets
             drawContext.getMatrices().translate(
-                    mc.getWindow().getScaledWidth() / 2.0,
-                    mc.getWindow().getScaledHeight() / 2.0,
+                    mc.getWindow().getScaledWidth() / 2.0 + textXOffset, // Apply X offset relative to center
+                    mc.getWindow().getScaledHeight() / 2.0 + textYOffset, // Apply Y offset relative to center
                     0);
+        } else {
+            // Translate based on offsets from top-left
+            drawContext.getMatrices().translate(textXOffset, textYOffset, 0);
         }
 
         RenderSystem.enableBlend();
+        // Default blend function is usually SRC_ALPHA, ONE_MINUS_SRC_ALPHA
         RenderSystem.defaultBlendFunc();
 
-        // Title rendering
+        // --- Title Rendering ---
         drawContext.getMatrices().push();
         drawContext.getMatrices().scale((float)textSize, (float)textSize, (float)textSize);
 
-        int alpha = opacity << 24 & 0xFF000000;
+        int alpha = opacity << 24; // Apply alpha (no bitwise AND needed here)
         TextRenderer fontRenderer = mc.textRenderer;
         int titleWidth = fontRenderer.getWidth(displayedTitle);
 
-        // Calculate x position - centered or from left
-        int xPos = centerText
-                ? textXOffset - (titleWidth / 2)
-                : textXOffset;
+        // Calculate x position based on centering
+        int titleXPos = centerText ? -(titleWidth / 2) : 0; // If centered, offset by half width; otherwise, start at 0 (relative to translation)
+        // Y position is implicitly 0 relative to the translation applied earlier
 
         // Draw title
         drawContext.drawText(
                 fontRenderer,
                 displayedTitle,
-                xPos,
-                textYOffset,
-                titleTextColor | alpha,
+                titleXPos, // X position relative to translation/scaling
+                0,         // Y position relative to translation/scaling
+                titleTextColor | alpha, // Combine color and alpha
                 renderShadow);
 
-        drawContext.getMatrices().pop();
+        drawContext.getMatrices().pop(); // Pop title scaling
 
-        // Subtitle rendering (if exists)
+        // --- Subtitle Rendering (if exists) ---
         if (displayedSubTitle != null) {
             drawContext.getMatrices().push();
-            float subtitleScale = 1.0F;
+            // Subtitle is typically smaller, scale it relative to the main translation
+            float subtitleScale = 1.0F; // Adjust as needed, maybe make configurable?
             drawContext.getMatrices().scale(subtitleScale, subtitleScale, subtitleScale);
 
             int subtitleWidth = fontRenderer.getWidth(displayedSubTitle);
-            int subtitleXPos = centerText
-                    ? -subtitleWidth / 2
-                    : 0;
+            // Calculate subtitle position relative to the main translation
+            int subtitleXPos = centerText ? -(subtitleWidth / 2) : 0;
+            // Position subtitle below the main title (adjust 14 based on font size/scaling if needed)
+            int subtitleYPos = (int)(14 / textSize); // Adjust Y based on main title's scale if they share the same translation point
 
             drawContext.drawText(
                     fontRenderer,
                     displayedSubTitle,
                     subtitleXPos,
-                    textYOffset + 14,
-                    0xFFFFFF | alpha,
+                    subtitleYPos, // Position below the title
+                    0xFFFFFF | alpha, // White subtitle, maybe make configurable?
                     renderShadow);
 
-            drawContext.getMatrices().pop();
+            drawContext.getMatrices().pop(); // Pop subtitle scaling
         }
 
         // Clean up render state
         RenderSystem.disableBlend();
-        drawContext.getMatrices().pop();
+        drawContext.getMatrices().pop(); // Pop main translation
     }
+
 
     private void setTextColor(String textColor) {
         try {
-            this.titleTextColor = (int) Long.parseLong(textColor, 16);
+            // Ensure the color string is treated as hexadecimal
+            this.titleTextColor = Integer.parseInt(textColor.replace("#", ""), 16);
         } catch (Exception e) {
-            System.err.println("Text color " + textColor + " is not a valid RGB color. Defaulting to white...");
-            this.titleTextColor = 0xFFFFFF;
+            System.err.println("Text color '" + textColor + "' is not a valid hex color (e.g., 'ffffff'). Defaulting to white...");
+            this.titleTextColor = 0xFFFFFF; // Default to white
         }
     }
 
     private void addRecentEntry(TerritoryProfile entry) {
-        if (recentEntries.size() >= recentTerritoryCacheSize && !recentEntries.isEmpty()) {
+        // Avoid adding duplicates if it's already the last entry
+        if (!recentEntries.isEmpty() && recentEntries.getLast().equals(entry)) {
+            return;
+        }
+
+        // Remove oldest if cache size is exceeded
+        while (recentEntries.size() >= recentTerritoryCacheSize && !recentEntries.isEmpty()) {
             recentEntries.removeFirst();
         }
+        // Add new entry if cache size allows
         if (recentTerritoryCacheSize > 0) {
             recentEntries.addLast(entry);
         }
     }
 
+
     private boolean matchesAnyRecentEntry(Predicate<TerritoryProfile> entryMatchPredicate) {
+        // Check if the predicate matches any entry in the current list
         return recentEntries.stream().anyMatch(entryMatchPredicate);
     }
 }
