@@ -18,6 +18,9 @@ public class TerritoryTitleCore {
     private int tickCounter = 0;
     private boolean isEnabled = true;
 
+    // Flag for only showing significant territories
+    private boolean showOnlySignificantTerritories = true;
+
     // Title renderer for visualization
     public TerritoryRenderer territoryRenderer = new TerritoryRenderer();
 
@@ -73,6 +76,7 @@ public class TerritoryTitleCore {
      */
     public void updateSettings(
             boolean enabled,
+            boolean showOnlySignificantTerritories,
             int fadeInTime,
             int displayTime,
             int fadeOutTime,
@@ -94,6 +98,7 @@ public class TerritoryTitleCore {
             int cacheSize
     ) {
         this.isEnabled = enabled;
+        this.showOnlySignificantTerritories = showOnlySignificantTerritories;
         territoryRenderer.enabled = enabled;
         territoryRenderer.textFadeInTime = fadeInTime;
         territoryRenderer.textDisplayTime = displayTime;
@@ -144,6 +149,14 @@ public class TerritoryTitleCore {
                 String territoryName = currentTerritory.getFriendlyName();
                 // Only display if the name is not null or empty
                 if (territoryName != null && !territoryName.isEmpty()) {
+                    boolean isSignificantTerritory = SignificantTerritoryManager.SIGNIFICANT_TERRITORIES.contains(territoryName);
+
+                    // Skip non-significant territories if the showOnlySignificantTerritories option is enabled
+                    if (showOnlySignificantTerritories && !isSignificantTerritory) {
+                        lastTerritoryProfile = currentTerritory;
+                        return;
+                    }
+
                     displayTerritoryTitle(territoryName, currentTerritory);
 
                     // Update last territory and add to recent entries

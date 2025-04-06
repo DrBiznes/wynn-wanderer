@@ -39,29 +39,33 @@ public class WynnWanderer implements ClientModInitializer {
 
     private void applyConfigToTerritoryTitleCore() {
         WynnWandererConfig.TerritoryTitlesConfig ttConfig = config.territoryTitles;
+        WynnWandererConfig.TerritoryTitlesConfig.AppearanceConfig appearanceConfig = ttConfig.appearance;
+        WynnWandererConfig.TerritoryTitlesConfig.PositioningConfig positioningConfig = ttConfig.positioning;
+        WynnWandererConfig.TerritoryTitlesConfig.AnimationConfig animationConfig = ttConfig.animation;
         WynnWandererConfig.TerritoryTitlesConfig.SignificantTerritoryConfig stConfig = ttConfig.significantTerritories;
 
         territoryTitleCore.updateSettings(
                 ttConfig.enabled,
-                ttConfig.textFadeInTime,
-                ttConfig.textDisplayTime,
-                ttConfig.textFadeOutTime,
-                ttConfig.textCooldownTime,
-                ttConfig.textColor,
-                ttConfig.textSize,
-                ttConfig.renderShadow,
-                ttConfig.textXOffset,
-                ttConfig.textYOffset,
-                ttConfig.subtitleXOffset,
-                ttConfig.subtitleYOffset,
-                ttConfig.subtitleSize,
+                ttConfig.showOnlySignificantTerritories,
+                animationConfig.textFadeInTime,
+                animationConfig.textDisplayTime,
+                animationConfig.textFadeOutTime,
+                animationConfig.textCooldownTime,
+                appearanceConfig.textColor,
+                appearanceConfig.textSize,
+                appearanceConfig.renderShadow,
+                positioningConfig.textXOffset,
+                positioningConfig.textYOffset,
+                positioningConfig.subtitleXOffset,
+                positioningConfig.subtitleYOffset,
+                appearanceConfig.subtitleSize,
                 stConfig.useEnhancedStyling,
                 stConfig.titleSizeMultiplier,
                 stConfig.subtitleSizeMultiplier,
                 stConfig.useCustomColors,
                 stConfig.defaultColor,
-                ttConfig.centerText,
-                ttConfig.recentTerritoryCacheSize
+                positioningConfig.centerText,
+                animationConfig.recentTerritoryCacheSize
         );
     }
 
