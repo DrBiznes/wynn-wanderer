@@ -32,6 +32,7 @@ public class TerritoryRenderer {
     public int subtitleYOffset = -20;
     public int subtitleXOffset = 0;
     public double subtitleSize = 1.3;
+    public boolean showSubtitles = true; // New property for subtitle toggle
 
     // Significant territory settings
     public boolean useEnhancedStyling = true;
@@ -158,8 +159,8 @@ public class TerritoryRenderer {
         RenderSystem.disableBlend();
         drawContext.getMatrices().pop(); // Pop title transform
 
-        // --- Subtitle Rendering (if exists) ---
-        if (displayedSubTitle != null) {
+        // --- Subtitle Rendering (if exists and enabled) ---
+        if (showSubtitles && displayedSubTitle != null) {
             drawContext.getMatrices().push();
 
             // Subtitle has its own positioning

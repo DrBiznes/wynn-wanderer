@@ -151,5 +151,7 @@
 
   "wynn_wanderer.territory.troms.title": "Troms",
   "wynn_wanderer.territory.troms.subtitle": "City of Ice and Snow",
-  "wynn_wanderer.territory.troms.color": "a3c5e0"
+  "wynn_wanderer.territory.troms.color": "a3c5e0",
+  "text.autoconfig.wynn-wanderer.option.territoryTitles.appearance.showSubtitles": "Show Subtitles",
+  "text.autoconfig.wynn-wanderer.option.territoryTitles.appearance.showSubtitles.@Tooltip": "Whether to display subtitles under territory titles"
 }

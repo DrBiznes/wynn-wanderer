@@ -45,6 +45,9 @@ public class WynnWandererConfig implements ConfigData {
 
             @ConfigEntry.Gui.Tooltip
             public double subtitleSize = 1.3;
+
+            @ConfigEntry.Gui.Tooltip
+            public boolean showSubtitles = true;  // New option to show/hide subtitles
         }
 
         public static class PositioningConfig {

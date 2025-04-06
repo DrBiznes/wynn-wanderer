@@ -59,6 +59,7 @@ public class WynnWanderer implements ClientModInitializer {
                 positioningConfig.subtitleXOffset,
                 positioningConfig.subtitleYOffset,
                 appearanceConfig.subtitleSize,
+                appearanceConfig.showSubtitles, // Add the new parameter
                 stConfig.useEnhancedStyling,
                 stConfig.titleSizeMultiplier,
                 stConfig.subtitleSizeMultiplier,

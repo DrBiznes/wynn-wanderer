@@ -89,6 +89,7 @@ public class TerritoryTitleCore {
             int subtitleXOffset,
             int subtitleYOffset,
             double subtitleSize,
+            boolean showSubtitles,
             boolean useEnhancedStyling,
             double titleSizeMultiplier,
             double subtitleSizeMultiplier,
@@ -113,6 +114,7 @@ public class TerritoryTitleCore {
         territoryRenderer.subtitleXOffset = subtitleXOffset;
         territoryRenderer.subtitleYOffset = subtitleYOffset;
         territoryRenderer.subtitleSize = subtitleSize;
+        territoryRenderer.showSubtitles = showSubtitles;
         territoryRenderer.useEnhancedStyling = useEnhancedStyling;
         territoryRenderer.titleSizeMultiplier = titleSizeMultiplier;
         territoryRenderer.subtitleSizeMultiplier = subtitleSizeMultiplier;
@@ -247,7 +249,8 @@ public class TerritoryTitleCore {
 
         // Start displaying the title
         territoryRenderer.displayedTitle = title;
-        territoryRenderer.displayedSubTitle = subtitle;
+        // Only set subtitle if they're enabled
+        territoryRenderer.displayedSubTitle = territoryRenderer.showSubtitles ? subtitle : null;
         territoryRenderer.titleTimer = territoryRenderer.textFadeInTime + territoryRenderer.textDisplayTime + territoryRenderer.textFadeOutTime;
         territoryRenderer.cooldownTimer = territoryRenderer.textCooldownTime; // Start cooldown immediately upon display
     }
