@@ -82,6 +82,9 @@ public class TerritoryTitleCore {
             boolean renderShadow,
             int xOffset,
             int yOffset,
+            int subtitleXOffset,
+            int subtitleYOffset,
+            double subtitleSize,
             boolean centerText,
             int cacheSize
     ) {
@@ -97,6 +100,9 @@ public class TerritoryTitleCore {
         territoryRenderer.renderShadow = renderShadow;
         territoryRenderer.textXOffset = xOffset;
         territoryRenderer.textYOffset = yOffset;
+        territoryRenderer.subtitleXOffset = subtitleXOffset;
+        territoryRenderer.subtitleYOffset = subtitleYOffset;
+        territoryRenderer.subtitleSize = subtitleSize;
         territoryRenderer.centerText = centerText;
         this.recentTerritoryCacheSize = cacheSize;
 

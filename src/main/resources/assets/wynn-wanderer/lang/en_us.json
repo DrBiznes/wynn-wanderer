@@ -21,14 +21,24 @@
   "text.autoconfig.wynn-wanderer.option.territoryTitles.textSize.@Tooltip": "Scale factor for the title text",
   "text.autoconfig.wynn-wanderer.option.territoryTitles.renderShadow": "Show Text Shadow",
   "text.autoconfig.wynn-wanderer.option.territoryTitles.renderShadow.@Tooltip": "Whether to show a shadow behind the title text",
-  "text.autoconfig.wynn-wanderer.option.territoryTitles.textYOffset": "Vertical Position",
-  "text.autoconfig.wynn-wanderer.option.territoryTitles.textYOffset.@Tooltip[0]": "Vertical position of the title on the screen",
+  "text.autoconfig.wynn-wanderer.option.territoryTitles.textYOffset": "Title Vertical Position",
+  "text.autoconfig.wynn-wanderer.option.territoryTitles.textYOffset.@Tooltip[0]": "Vertical position of the main title on the screen",
   "text.autoconfig.wynn-wanderer.option.territoryTitles.textYOffset.@Tooltip[1]": "Negative values move the title up",
   "text.autoconfig.wynn-wanderer.option.territoryTitles.textYOffset.@Tooltip[2]": "Positive values move the title down",
-  "text.autoconfig.wynn-wanderer.option.territoryTitles.textXOffset": "Horizontal Position",
-  "text.autoconfig.wynn-wanderer.option.territoryTitles.textXOffset.@Tooltip[0]": "Horizontal position of the title on the screen",
+  "text.autoconfig.wynn-wanderer.option.territoryTitles.textXOffset": "Title Horizontal Position",
+  "text.autoconfig.wynn-wanderer.option.territoryTitles.textXOffset.@Tooltip[0]": "Horizontal position of the main title on the screen",
   "text.autoconfig.wynn-wanderer.option.territoryTitles.textXOffset.@Tooltip[1]": "Negative values move the title left",
   "text.autoconfig.wynn-wanderer.option.territoryTitles.textXOffset.@Tooltip[2]": "Positive values move the title right",
+  "text.autoconfig.wynn-wanderer.option.territoryTitles.subtitleYOffset": "Subtitle Vertical Position",
+  "text.autoconfig.wynn-wanderer.option.territoryTitles.subtitleYOffset.@Tooltip[0]": "Vertical position of the subtitle on the screen",
+  "text.autoconfig.wynn-wanderer.option.territoryTitles.subtitleYOffset.@Tooltip[1]": "Negative values move the subtitle up",
+  "text.autoconfig.wynn-wanderer.option.territoryTitles.subtitleYOffset.@Tooltip[2]": "Positive values move the subtitle down",
+  "text.autoconfig.wynn-wanderer.option.territoryTitles.subtitleXOffset": "Subtitle Horizontal Position",
+  "text.autoconfig.wynn-wanderer.option.territoryTitles.subtitleXOffset.@Tooltip[0]": "Horizontal position of the subtitle on the screen",
+  "text.autoconfig.wynn-wanderer.option.territoryTitles.subtitleXOffset.@Tooltip[1]": "Negative values move the subtitle left",
+  "text.autoconfig.wynn-wanderer.option.territoryTitles.subtitleXOffset.@Tooltip[2]": "Positive values move the subtitle right",
+  "text.autoconfig.wynn-wanderer.option.territoryTitles.subtitleSize": "Subtitle Text Size",
+  "text.autoconfig.wynn-wanderer.option.territoryTitles.subtitleSize.@Tooltip": "Scale factor for the subtitle text",
   "text.autoconfig.wynn-wanderer.option.territoryTitles.centerText": "Center Text",
   "text.autoconfig.wynn-wanderer.option.territoryTitles.centerText.@Tooltip[0]": "Whether to center the title text on the screen",
   "text.autoconfig.wynn-wanderer.option.territoryTitles.centerText.@Tooltip[1]": "If enabled, horizontal and vertical positions are",
@@ -58,5 +68,61 @@
 
   "wynn_wanderer.territory.llevigar.title": "Llevigar",
   "wynn_wanderer.territory.llevigar.subtitle": "Gateway to Gavel",
-  "wynn_wanderer.territory.llevigar.color": "996633"
+  "wynn_wanderer.territory.llevigar.color": "996633",
+
+  "wynn_wanderer.territory.gelibord.title": "Gelibord",
+  "wynn_wanderer.territory.gelibord.subtitle": "Ancient Port City",
+  "wynn_wanderer.territory.gelibord.color": "4a90a8",
+
+  "wynn_wanderer.territory.olux.title": "Olux",
+  "wynn_wanderer.territory.olux.subtitle": "City of the Setting Sun",
+  "wynn_wanderer.territory.olux.color": "d89c38",
+
+  "wynn_wanderer.territory.rodoroc.title": "Rodoroc",
+  "wynn_wanderer.territory.rodoroc.subtitle": "Fortress of the Mountains",
+  "wynn_wanderer.territory.rodoroc.color": "7c6353",
+
+  "wynn_wanderer.territory.eltom.title": "Eltom",
+  "wynn_wanderer.territory.eltom.subtitle": "Crossroads of Commerce",
+  "wynn_wanderer.territory.eltom.color": "5f9a78",
+
+  "wynn_wanderer.territory.cinfras.title": "Cinfras",
+  "wynn_wanderer.territory.cinfras.subtitle": "Jewel of the Valley",
+  "wynn_wanderer.territory.cinfras.color": "8c3f62",
+
+  "wynn_wanderer.territory.ahmsord.title": "Ahmsord",
+  "wynn_wanderer.territory.ahmsord.subtitle": "City of Knowledge",
+  "wynn_wanderer.territory.ahmsord.color": "7d497c",
+
+  "wynn_wanderer.territory.kandon-beda.title": "Kandon-Beda",
+  "wynn_wanderer.territory.kandon-beda.subtitle": "Twin Cities of Trade",
+  "wynn_wanderer.territory.kandon-beda.color": "a16946",
+
+  "wynn_wanderer.territory.thesead.title": "Thesead",
+  "wynn_wanderer.territory.thesead.subtitle": "Maritime Haven",
+  "wynn_wanderer.territory.thesead.color": "3c7b94",
+
+  "wynn_wanderer.territory.corkus_city.title": "Corkus City",
+  "wynn_wanderer.territory.corkus_city.subtitle": "Capital of the Sky Islands",
+  "wynn_wanderer.territory.corkus_city.color": "c7b350",
+
+  "wynn_wanderer.territory.selchar.title": "Selchar",
+  "wynn_wanderer.territory.selchar.subtitle": "Pearl of the South Sea",
+  "wynn_wanderer.territory.selchar.color": "4fa88c",
+
+  "wynn_wanderer.territory.nemract.title": "Nemract",
+  "wynn_wanderer.territory.nemract.subtitle": "City of the Eastern Shore",
+  "wynn_wanderer.territory.nemract.color": "6a8ca8",
+
+  "wynn_wanderer.territory.lutho.title": "Lutho",
+  "wynn_wanderer.territory.lutho.subtitle": "Village of Enlightenment",
+  "wynn_wanderer.territory.lutho.color": "7f6b3a",
+
+  "wynn_wanderer.territory.nesaak.title": "Nesaak",
+  "wynn_wanderer.territory.nesaak.subtitle": "Bastion of the North",
+  "wynn_wanderer.territory.nesaak.color": "7a9bbc",
+
+  "wynn_wanderer.territory.troms.title": "Troms",
+  "wynn_wanderer.territory.troms.subtitle": "City of Ice and Snow",
+  "wynn_wanderer.territory.troms.color": "a3c5e0"
 }

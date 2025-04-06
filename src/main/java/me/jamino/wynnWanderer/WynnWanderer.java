@@ -51,6 +51,9 @@ public class WynnWanderer implements ClientModInitializer {
                 ttConfig.renderShadow,
                 ttConfig.textXOffset,
                 ttConfig.textYOffset,
+                ttConfig.subtitleXOffset,
+                ttConfig.subtitleYOffset,
+                ttConfig.subtitleSize,
                 ttConfig.centerText,
                 ttConfig.recentTerritoryCacheSize
         );

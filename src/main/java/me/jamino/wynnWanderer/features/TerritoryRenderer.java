@@ -24,9 +24,14 @@ public class TerritoryRenderer {
     public String textColor = "ffffff";
     public double textSize = 2.1;
     public boolean renderShadow = true;
-    public int textYOffset = -33;
+    public int textYOffset = -40; // Updated default to move title up
     public int textXOffset = 0;
     public boolean centerText = true;
+
+    // New subtitle positioning properties
+    public int subtitleYOffset = -20;
+    public int subtitleXOffset = 0;
+    public double subtitleSize = 1.3;
 
     /**
      * Sets the color of text to render
@@ -91,72 +96,87 @@ public class TerritoryRenderer {
         // Set up rendering state
         drawContext.getMatrices().push();
 
-        // Center the title if enabled
-        if (centerText) {
-            // Translate to the center of the screen, then apply offsets
-            drawContext.getMatrices().translate(
-                    mc.getWindow().getScaledWidth() / 2.0 + textXOffset, // Apply X offset relative to center
-                    mc.getWindow().getScaledHeight() / 2.0 + textYOffset, // Apply Y offset relative to center
-                    0);
-        } else {
-            // Translate based on offsets from top-left
-            drawContext.getMatrices().translate(textXOffset, textYOffset, 0);
-        }
+        // Common alpha value for both title and subtitle
+        int alpha = opacity << 24; // Apply alpha
 
-        RenderSystem.enableBlend();
-        // Default blend function is usually SRC_ALPHA, ONE_MINUS_SRC_ALPHA
-        RenderSystem.defaultBlendFunc();
+        TextRenderer fontRenderer = mc.textRenderer;
 
         // --- Title Rendering ---
         drawContext.getMatrices().push();
+
+        // Center the title according to settings
+        if (centerText) {
+            // Move to center of screen, then apply offsets
+            drawContext.getMatrices().translate(
+                    mc.getWindow().getScaledWidth() / 2.0 + textXOffset,
+                    mc.getWindow().getScaledHeight() / 2.0 + textYOffset,
+                    0);
+        } else {
+            // Use direct offsets
+            drawContext.getMatrices().translate(textXOffset, textYOffset, 0);
+        }
+
         drawContext.getMatrices().scale((float)textSize, (float)textSize, (float)textSize);
 
-        int alpha = opacity << 24; // Apply alpha (no bitwise AND needed here)
-        TextRenderer fontRenderer = mc.textRenderer;
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+
         int titleWidth = fontRenderer.getWidth(displayedTitle);
 
         // Calculate x position based on centering
-        int titleXPos = centerText ? -(titleWidth / 2) : 0; // If centered, offset by half width; otherwise, start at 0 (relative to translation)
-        // Y position is implicitly 0 relative to the translation applied earlier
+        int titleXPos = centerText ? -(titleWidth / 2) : 0;
 
         // Draw title
         drawContext.drawText(
                 fontRenderer,
                 displayedTitle,
-                titleXPos, // X position relative to translation/scaling
-                0,         // Y position relative to translation/scaling
-                titleTextColor | alpha, // Combine color and alpha
+                titleXPos,
+                0,
+                titleTextColor | alpha,
                 renderShadow);
 
-        drawContext.getMatrices().pop(); // Pop title scaling
+        RenderSystem.disableBlend();
+        drawContext.getMatrices().pop(); // Pop title transform
 
         // --- Subtitle Rendering (if exists) ---
         if (displayedSubTitle != null) {
             drawContext.getMatrices().push();
-            // Subtitle is typically smaller, scale it relative to the main translation
-            float subtitleScale = 1.0F; // Adjust as needed, maybe make configurable?
-            drawContext.getMatrices().scale(subtitleScale, subtitleScale, subtitleScale);
+
+            // Subtitle has its own positioning
+            if (centerText) {
+                // Move to center of screen, then apply subtitle offsets
+                drawContext.getMatrices().translate(
+                        mc.getWindow().getScaledWidth() / 2.0 + subtitleXOffset,
+                        mc.getWindow().getScaledHeight() / 2.0 + subtitleYOffset,
+                        0);
+            } else {
+                // Use direct subtitle offsets
+                drawContext.getMatrices().translate(subtitleXOffset, subtitleYOffset, 0);
+            }
+
+            // Use subtitle scale
+            drawContext.getMatrices().scale((float)subtitleSize, (float)subtitleSize, (float)subtitleSize);
+
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
 
             int subtitleWidth = fontRenderer.getWidth(displayedSubTitle);
-            // Calculate subtitle position relative to the main translation
             int subtitleXPos = centerText ? -(subtitleWidth / 2) : 0;
-            // Position subtitle below the main title (adjust 14 based on font size/scaling if needed)
-            int subtitleYPos = (int)(14 / textSize); // Adjust Y based on main title's scale if they share the same translation point
 
             drawContext.drawText(
                     fontRenderer,
                     displayedSubTitle,
                     subtitleXPos,
-                    subtitleYPos, // Position below the title
-                    0xFFFFFF | alpha, // White subtitle, maybe make configurable?
+                    0,
+                    0xFFFFFF | alpha, // White subtitle color
                     renderShadow);
 
-            drawContext.getMatrices().pop(); // Pop subtitle scaling
+            RenderSystem.disableBlend();
+            drawContext.getMatrices().pop(); // Pop subtitle transform
         }
 
         // Clean up render state
-        RenderSystem.disableBlend();
-        drawContext.getMatrices().pop(); // Pop main translation
+        drawContext.getMatrices().pop(); // Pop main transform
     }
 
     /**

@@ -35,10 +35,20 @@ public class WynnWandererConfig implements ConfigData {
         public boolean renderShadow = true;
 
         @ConfigEntry.Gui.Tooltip(count = 3)
-        public int textYOffset = -33;
+        public int textYOffset = -40; // Updated default to move title up a bit
 
         @ConfigEntry.Gui.Tooltip(count = 3)
         public int textXOffset = 0;
+
+        // New subtitle positioning settings
+        @ConfigEntry.Gui.Tooltip(count = 3)
+        public int subtitleYOffset = -20; // Default position for subtitle
+
+        @ConfigEntry.Gui.Tooltip(count = 3)
+        public int subtitleXOffset = 0;
+
+        @ConfigEntry.Gui.Tooltip
+        public double subtitleSize = 1.3; // Smaller scale for subtitle
 
         @ConfigEntry.Gui.Tooltip(count = 3)
         public boolean centerText = true;
