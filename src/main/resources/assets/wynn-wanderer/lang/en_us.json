@@ -75,6 +75,9 @@
   "text.autoconfig.wynn-wanderer.option.territoryTitles.significantTerritories.defaultColor": "Default Color",
   "text.autoconfig.wynn-wanderer.option.territoryTitles.significantTerritories.defaultColor.@Tooltip": "Default color for significant territories if custom colors are not found",
 
+  "text.autoconfig.wynn-wanderer.option.territoryTitles.appearance.showSubtitles": "Show Subtitles",
+  "text.autoconfig.wynn-wanderer.option.territoryTitles.appearance.showSubtitles.@Tooltip": "Whether to display subtitles under territory titles",
+
   "wynn_wanderer.territory.entering.title": "Entering %s",
   "wynn_wanderer.territory.entering.subtitle": "",
 
@@ -82,15 +85,15 @@
   "wynn_wanderer.territory.significant.subtitle": "A major settlement",
 
   "wynn_wanderer.territory.ragni.title": "Ragni",
-  "wynn_wanderer.territory.ragni.subtitle": "Capital of Wynn Province",
+  "wynn_wanderer.territory.ragni.subtitle": "Ancient Fortress of New Beginnings",
   "wynn_wanderer.territory.ragni.color": "336699",
 
   "wynn_wanderer.territory.detlas.title": "Detlas",
-  "wynn_wanderer.territory.detlas.subtitle": "Trading Hub of Wynn",
+  "wynn_wanderer.territory.detlas.subtitle": "Heart of the Province",
   "wynn_wanderer.territory.detlas.color": "669933",
 
   "wynn_wanderer.territory.almuj.title": "Al'Muaj",
-  "wynn_wanderer.territory.almuj.subtitle": "Desert City of Merchants",
+  "wynn_wanderer.territory.almuj.subtitle": "Emerald Oasis of Trade",
   "wynn_wanderer.territory.almuj.color": "cc9966",
 
   "wynn_wanderer.territory.llevigar.title": "Llevigar",
@@ -98,60 +101,62 @@
   "wynn_wanderer.territory.llevigar.color": "996633",
 
   "wynn_wanderer.territory.gelibord.title": "Gelibord",
-  "wynn_wanderer.territory.gelibord.subtitle": "Ancient Port City",
+  "wynn_wanderer.territory.gelibord.subtitle": "Ancient City at Decay's Edge",
   "wynn_wanderer.territory.gelibord.color": "4a90a8",
 
   "wynn_wanderer.territory.olux.title": "Olux",
-  "wynn_wanderer.territory.olux.subtitle": "City of the Setting Sun",
+  "wynn_wanderer.territory.olux.subtitle": "Decaying Swamp Haven",
   "wynn_wanderer.territory.olux.color": "d89c38",
 
   "wynn_wanderer.territory.rodoroc.title": "Rodoroc",
-  "wynn_wanderer.territory.rodoroc.subtitle": "Fortress of the Mountains",
+  "wynn_wanderer.territory.rodoroc.subtitle": "Dwarven Capital of Molten Heights",
   "wynn_wanderer.territory.rodoroc.color": "7c6353",
 
   "wynn_wanderer.territory.eltom.title": "Eltom",
-  "wynn_wanderer.territory.eltom.subtitle": "Crossroads of Commerce",
+  "wynn_wanderer.territory.eltom.subtitle": "Hidden City of Secrets",
   "wynn_wanderer.territory.eltom.color": "5f9a78",
 
   "wynn_wanderer.territory.cinfras.title": "Cinfras",
-  "wynn_wanderer.territory.cinfras.subtitle": "Jewel of the Valley",
+  "wynn_wanderer.territory.cinfras.subtitle": "Central Hub of Gavel",
   "wynn_wanderer.territory.cinfras.color": "8c3f62",
 
   "wynn_wanderer.territory.ahmsord.title": "Ahmsord",
-  "wynn_wanderer.territory.ahmsord.subtitle": "City of Knowledge",
+  "wynn_wanderer.territory.ahmsord.subtitle": "Floating Pinnacle of Wisdom",
   "wynn_wanderer.territory.ahmsord.color": "7d497c",
 
   "wynn_wanderer.territory.kandon-beda.title": "Kandon-Beda",
-  "wynn_wanderer.territory.kandon-beda.subtitle": "Twin Cities of Trade",
+  "wynn_wanderer.territory.kandon-beda.subtitle": "Sentinel Base of the Colossus",
   "wynn_wanderer.territory.kandon-beda.color": "a16946",
 
   "wynn_wanderer.territory.thesead.title": "Thesead",
-  "wynn_wanderer.territory.thesead.subtitle": "Maritime Haven",
+  "wynn_wanderer.territory.thesead.subtitle": "Observatory Above the Mines",
   "wynn_wanderer.territory.thesead.color": "3c7b94",
 
   "wynn_wanderer.territory.corkus_city.title": "Corkus City",
-  "wynn_wanderer.territory.corkus_city.subtitle": "Capital of the Sky Islands",
+  "wynn_wanderer.territory.corkus_city.subtitle": "Sovereign Isle of the Corkians",
   "wynn_wanderer.territory.corkus_city.color": "c7b350",
 
   "wynn_wanderer.territory.selchar.title": "Selchar",
-  "wynn_wanderer.territory.selchar.subtitle": "Pearl of the South Sea",
+  "wynn_wanderer.territory.selchar.subtitle": "Crossroads of the Ocean",
   "wynn_wanderer.territory.selchar.color": "4fa88c",
 
   "wynn_wanderer.territory.nemract.title": "Nemract",
-  "wynn_wanderer.territory.nemract.subtitle": "City of the Eastern Shore",
+  "wynn_wanderer.territory.nemract.subtitle": "Harbor of Poverty's Paradox",
   "wynn_wanderer.territory.nemract.color": "6a8ca8",
 
   "wynn_wanderer.territory.lutho.title": "Lutho",
-  "wynn_wanderer.territory.lutho.subtitle": "Village of Enlightenment",
+  "wynn_wanderer.territory.lutho.subtitle": "The Lost Village",
   "wynn_wanderer.territory.lutho.color": "7f6b3a",
 
   "wynn_wanderer.territory.nesaak.title": "Nesaak",
   "wynn_wanderer.territory.nesaak.subtitle": "Bastion of the North",
   "wynn_wanderer.territory.nesaak.color": "7a9bbc",
 
+  "wynn_wanderer.territory.alekin.title": "Alekin",
+  "wynn_wanderer.territory.alekin.subtitle": "Forest Sanctuary of Vagabonds",
+  "wynn_wanderer.territory.alekin.color": "7a9bbc",
+
   "wynn_wanderer.territory.troms.title": "Troms",
-  "wynn_wanderer.territory.troms.subtitle": "City of Ice and Snow",
-  "wynn_wanderer.territory.troms.color": "a3c5e0",
-  "text.autoconfig.wynn-wanderer.option.territoryTitles.appearance.showSubtitles": "Show Subtitles",
-  "text.autoconfig.wynn-wanderer.option.territoryTitles.appearance.showSubtitles.@Tooltip": "Whether to display subtitles under territory titles"
+  "wynn_wanderer.territory.troms.subtitle": "Ancient Sister of Ragni",
+  "wynn_wanderer.territory.troms.color": "a3c5e0"
 }
