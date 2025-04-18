@@ -9,9 +9,6 @@ import net.minecraft.util.math.Vec3d;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 
-import java.util.LinkedList;
-import java.util.function.Predicate;
-
 public class TerritoryTitleCore {
     private TerritoryProfile lastTerritoryProfile = null;
     private static final int CHECK_INTERVAL_TICKS = 10;
@@ -24,11 +21,13 @@ public class TerritoryTitleCore {
     // Title renderer for visualization
     public TerritoryRenderer territoryRenderer = new TerritoryRenderer();
 
-    // Track recently visited territories
-    public final LinkedList<TerritoryProfile> recentEntries = new LinkedList<>();
+    // Territory cache for tracking recently visited territories
+    private TerritoryCache territoryCache;
 
-    // Configuration for recently visited territory cache
-    public int recentTerritoryCacheSize = 3;
+    public TerritoryTitleCore() {
+        // Initialize cache with default size
+        territoryCache = new TerritoryCache(3);
+    }
 
     public void initialize() {
         // Register tick event to periodically check for territory changes
@@ -121,12 +120,9 @@ public class TerritoryTitleCore {
         territoryRenderer.useCustomColors = useCustomColors;
         territoryRenderer.defaultSignificantColor = defaultSignificantColor;
         territoryRenderer.centerText = centerText;
-        this.recentTerritoryCacheSize = cacheSize;
 
-        // Ensure the recent entries list respects the new cache size immediately
-        while (recentEntries.size() > this.recentTerritoryCacheSize && !recentEntries.isEmpty()) {
-            recentEntries.removeFirst();
-        }
+        // Update the cache size
+        territoryCache.setCacheSize(cacheSize);
     }
 
     private void checkTerritory() {
@@ -143,7 +139,7 @@ public class TerritoryTitleCore {
             // If player entered a new territory
             if (currentTerritory != null && !currentTerritory.equals(lastTerritoryProfile)) {
                 // Skip if the territory is in the recent list and cooldown is active
-                if (territoryRenderer.cooldownTimer > 0 && matchesAnyRecentEntry(t -> t.equals(currentTerritory))) {
+                if (territoryRenderer.cooldownTimer > 0 && territoryCache.matchesAnyEntry(t -> t.equals(currentTerritory))) {
                     lastTerritoryProfile = currentTerritory;
                     return;
                 }
@@ -163,7 +159,7 @@ public class TerritoryTitleCore {
 
                     // Update last territory and add to recent entries
                     lastTerritoryProfile = currentTerritory;
-                    addRecentEntry(currentTerritory);
+                    territoryCache.addEntry(currentTerritory);
                 } else {
                     // Territory exists but has no friendly name, treat as leaving territory for display purposes
                     lastTerritoryProfile = null;
@@ -255,29 +251,17 @@ public class TerritoryTitleCore {
         territoryRenderer.cooldownTimer = territoryRenderer.textCooldownTime; // Start cooldown immediately upon display
     }
 
-    private void addRecentEntry(TerritoryProfile entry) {
-        // Avoid adding duplicates if it's already the last entry
-        if (!recentEntries.isEmpty() && recentEntries.getLast().equals(entry)) {
-            return;
-        }
-
-        // Remove oldest if cache size is exceeded
-        while (recentEntries.size() >= recentTerritoryCacheSize && !recentEntries.isEmpty()) {
-            recentEntries.removeFirst();
-        }
-        // Add new entry if cache size allows
-        if (recentTerritoryCacheSize > 0) {
-            recentEntries.addLast(entry);
-        }
-    }
-
-    private boolean matchesAnyRecentEntry(Predicate<TerritoryProfile> entryMatchPredicate) {
-        // Check if the predicate matches any entry in the current list
-        return recentEntries.stream().anyMatch(entryMatchPredicate);
-    }
-
     // For external access to clear timers if needed
     public void clearTimer() {
         territoryRenderer.clearTimer();
+    }
+
+    /**
+     * Get the territory cache for testing or debugging purposes
+     *
+     * @return The territory cache
+     */
+    public TerritoryCache getTerritoryCache() {
+        return territoryCache;
     }
 }
