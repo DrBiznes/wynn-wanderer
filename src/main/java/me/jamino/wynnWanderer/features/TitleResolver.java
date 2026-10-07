@@ -16,10 +16,20 @@ public final class TitleResolver {
     private TitleResolver() {}
 
     /**
-     * The translation keys (formatted with the territory name) and RGB color of a title.
+     * The translation keys (formatted with the territory name) and RGB colors of a title.
+     *
+     * @param color Color of the title
+     * @param textColor Second color of the title, see {@link TitleText}
+     * @param subtitleColor Color of the subtitle
      */
     public record ResolvedTitle(
-            String territoryName, String titleKey, String subtitleKey, int color, boolean significant) {}
+            String territoryName,
+            String titleKey,
+            String subtitleKey,
+            int color,
+            int textColor,
+            int subtitleColor,
+            boolean significant) {}
 
     /**
      * @param territoryName Friendly name of the territory
@@ -33,7 +43,14 @@ public final class TitleResolver {
 
         if (!SignificantTerritoryManager.isSignificant(territoryName)) {
             // For regular territories, use the generic "Entering X" title
-            return new ResolvedTitle(territoryName, ENTERING_TITLE_KEY, ENTERING_SUBTITLE_KEY, textColor, false);
+            return new ResolvedTitle(
+                    territoryName,
+                    ENTERING_TITLE_KEY,
+                    ENTERING_SUBTITLE_KEY,
+                    textColor,
+                    TitleColor.contrasting(textColor),
+                    TitleColor.WHITE,
+                    false);
         }
 
         // Significant territories have territory-specific keys for custom styling
@@ -44,7 +61,13 @@ public final class TitleResolver {
         String subtitleKey = territoryKey + ".subtitle";
 
         int color = textColor;
+        // Without colors of their own, the second color has to stay readable on the first one
+        String customTextColor = null;
+        String customSubtitleColor = null;
         if (significantConfig.useCustomColors) {
+            customTextColor = translations.apply(territoryKey + ".text_color");
+            customSubtitleColor = translations.apply(territoryKey + ".subtitle_color");
+
             String customColor = translations.apply(territoryKey + ".color");
             if (TitleColor.isHex(customColor)) {
                 color = TitleColor.parse(customColor, textColor);
@@ -62,6 +85,13 @@ public final class TitleResolver {
             subtitleKey = SIGNIFICANT_SUBTITLE_KEY;
         }
 
-        return new ResolvedTitle(territoryName, titleKey, subtitleKey, color, true);
+        return new ResolvedTitle(
+                territoryName,
+                titleKey,
+                subtitleKey,
+                color,
+                TitleColor.parse(customTextColor, TitleColor.contrasting(color)),
+                TitleColor.parse(customSubtitleColor, TitleColor.WHITE),
+                true);
     }
 }

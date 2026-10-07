@@ -57,7 +57,9 @@ public class TerritoryRenderer {
                 positioning.centerText,
                 titleSize,
                 TitleColor.withAlpha(displayedTitle.color(), opacity),
-                shadow);
+                shadow,
+                // The shadow would show through a background that is fading
+                displayedTitle.background() && shadow && opacity < 255);
 
         // Subtitle has its own positioning
         if (displayedTitle.subtitle() != null) {
@@ -69,9 +71,9 @@ public class TerritoryRenderer {
                     positioning.subtitleYOffset,
                     positioning.centerText,
                     subtitleSize,
-                    // White subtitle color
-                    TitleColor.withAlpha(TitleColor.WHITE, opacity),
-                    shadow);
+                    TitleColor.withAlpha(displayedTitle.subtitleColor(), opacity),
+                    shadow,
+                    false);
         }
 
         renderCount++;
@@ -86,10 +88,43 @@ public class TerritoryRenderer {
             boolean centerText,
             float size,
             int color,
-            boolean shadow) {
-        TitlePosition position = TitlePosition.of(
-                guiGraphics.guiWidth(), guiGraphics.guiHeight(), xOffset, yOffset, centerText, font.width(text), size);
+            boolean shadow,
+            boolean separateShadow) {
+        int width = font.width(text);
+        int screenWidth = guiGraphics.guiWidth();
+        int screenHeight = guiGraphics.guiHeight();
+        TitlePosition position = TitlePosition.of(screenWidth, screenHeight, xOffset, yOffset, centerText, width, size);
 
+        if (!separateShadow) {
+            drawLine(guiGraphics, font, text, position, size, color, shadow);
+            return;
+        }
+
+        // A translucent background lets the shadow underneath it show through, which makes the two fade
+        // differently. So the shadow is only drawn where it is not covered: to the right of and below it.
+        TitlePosition.BackgroundEdges edges = position.backgroundEdges(width, size);
+
+        guiGraphics.enableScissor(0, 0, edges.right(), edges.bottom());
+        drawLine(guiGraphics, font, text, position, size, color, false);
+        guiGraphics.disableScissor();
+
+        guiGraphics.enableScissor(edges.right(), 0, screenWidth, screenHeight);
+        drawLine(guiGraphics, font, text, position, size, color, true);
+        guiGraphics.disableScissor();
+
+        guiGraphics.enableScissor(0, edges.bottom(), edges.right(), screenHeight);
+        drawLine(guiGraphics, font, text, position, size, color, true);
+        guiGraphics.disableScissor();
+    }
+
+    private void drawLine(
+            GuiGraphics guiGraphics,
+            Font font,
+            Component text,
+            TitlePosition position,
+            float size,
+            int color,
+            boolean shadow) {
         guiGraphics.pose().pushMatrix();
         guiGraphics.pose().translate(position.x(), position.y());
         guiGraphics.pose().scale(size, size);

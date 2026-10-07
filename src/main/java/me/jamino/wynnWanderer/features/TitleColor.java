@@ -5,6 +5,7 @@ package me.jamino.wynnWanderer.features;
  */
 public final class TitleColor {
     public static final int WHITE = 0xFFFFFF;
+    public static final int BLACK = 0x000000;
 
     private TitleColor() {}
 
@@ -30,6 +31,17 @@ public final class TitleColor {
         }
 
         return isHex(hex) ? Integer.parseInt(hex, 16) : fallback;
+    }
+
+    /**
+     * @return Black or white, whichever is easier to read on top of the color
+     */
+    public static int contrasting(int rgb) {
+        int red = (rgb >> 16) & 0xFF;
+        int green = (rgb >> 8) & 0xFF;
+        int blue = rgb & 0xFF;
+        // Perceived brightness
+        return (red * 299 + green * 587 + blue * 114) / 1000 >= 128 ? BLACK : WHITE;
     }
 
     /**

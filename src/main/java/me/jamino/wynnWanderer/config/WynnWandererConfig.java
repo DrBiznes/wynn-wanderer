@@ -44,7 +44,7 @@ public class WynnWandererConfig implements ConfigData {
             public boolean renderShadow = true;
 
             @ConfigEntry.Gui.Tooltip
-            public double subtitleSize = 1.3;
+            public double subtitleSize = 1.0;
 
             @ConfigEntry.Gui.Tooltip
             public boolean showSubtitles = true;  // New option to show/hide subtitles
@@ -58,7 +58,7 @@ public class WynnWandererConfig implements ConfigData {
             public int textXOffset = 0;
 
             @ConfigEntry.Gui.Tooltip(count = 3)
-            public int subtitleYOffset = -240;  // Adjusted to be below the title
+            public int subtitleYOffset = -276;  // Just below the title
 
             @ConfigEntry.Gui.Tooltip(count = 3)
             public int subtitleXOffset = 0;

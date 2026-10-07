@@ -31,7 +31,9 @@ class LangFileTest {
 
             assertFalse(lang.getOrDefault(key + ".title", "").isBlank(), "Missing title for " + territory);
             assertFalse(lang.getOrDefault(key + ".subtitle", "").isBlank(), "Missing subtitle for " + territory);
-            assertTrue(TitleColor.isHex(lang.get(key + ".color")), "Missing or invalid color for " + territory);
+            for (String color : List.of(".color", ".text_color", ".subtitle_color")) {
+                assertTrue(TitleColor.isHex(lang.get(key + color)), "Missing or invalid " + color + " for " + territory);
+            }
         }
     }
 
@@ -44,7 +46,12 @@ class LangFileTest {
                 TitleResolver.SIGNIFICANT_SUBTITLE_KEY));
         for (String territory : SignificantTerritoryManager.SIGNIFICANT_TERRITORIES) {
             String key = SignificantTerritoryManager.getTranslationKey(territory);
-            known.addAll(List.of(key + ".title", key + ".subtitle", key + ".color"));
+            known.addAll(List.of(
+                    key + ".title",
+                    key + ".subtitle",
+                    key + ".color",
+                    key + ".text_color",
+                    key + ".subtitle_color"));
         }
 
         Set<String> actual = new TreeSet<>();

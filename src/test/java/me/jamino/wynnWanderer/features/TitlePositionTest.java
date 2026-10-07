@@ -45,4 +45,17 @@ class TitlePositionTest {
 
         assertEquals(new TitlePosition(213.5f, 120.5f), position);
     }
+
+    @Test
+    void backgroundEdgesAreScaledAndRoundedDown() {
+        // 34 wide and 7 tall at 2.5x, so the background ends at 95.5 and 38.0
+        TitlePosition.BackgroundEdges edges = new TitlePosition(10.5f, 20.5f).backgroundEdges(34, 2.5f);
+
+        assertEquals(new TitlePosition.BackgroundEdges(95, 38), edges);
+    }
+
+    @Test
+    void backgroundEdgesLeftOfTheScreenAreRoundedDownAsWell() {
+        assertEquals(new TitlePosition.BackgroundEdges(-8, -4), new TitlePosition(-10.5f, -10.5f).backgroundEdges(3, 1f));
+    }
 }

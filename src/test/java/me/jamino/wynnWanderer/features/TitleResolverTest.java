@@ -33,6 +33,28 @@ class TitleResolverTest {
     }
 
     @Test
+    void significantTerritoriesHaveATextAndSubtitleColor() {
+        ResolvedTitle title = TitleResolver.resolve("Ragni", config, lang::get);
+
+        // Red pill with yellow letters, like the poster of the city
+        assertEquals(0x993333, title.color());
+        assertEquals(0xE5E533, title.textColor());
+        assertEquals(0xE5E533, title.subtitleColor());
+    }
+
+    @Test
+    void missingTextColorsStayReadableOnTheTitleColor() {
+        Map<String, String> oldPack = new HashMap<>(lang);
+        oldPack.remove("wynn_wanderer.territory.ragni.text_color");
+        oldPack.remove("wynn_wanderer.territory.ragni.subtitle_color");
+
+        ResolvedTitle title = TitleResolver.resolve("Ragni", config, oldPack::get);
+
+        assertEquals(TitleColor.WHITE, title.textColor());
+        assertEquals(TitleColor.WHITE, title.subtitleColor());
+    }
+
+    @Test
     void territoryNamesWithSpacesMapToUnderscoredKeys() {
         ResolvedTitle title = TitleResolver.resolve("Corkus City", config, lang::get);
 
@@ -58,7 +80,12 @@ class TitleResolverTest {
         config.appearance.textColor = "abcdef";
         config.significantTerritories.useCustomColors = false;
 
-        assertEquals(0xABCDEF, TitleResolver.resolve("Detlas", config, lang::get).color());
+        ResolvedTitle title = TitleResolver.resolve("Detlas", config, lang::get);
+
+        assertEquals(0xABCDEF, title.color());
+        // The letters of the pill must not disappear into it
+        assertEquals(TitleColor.BLACK, title.textColor());
+        assertEquals(TitleColor.WHITE, title.subtitleColor());
     }
 
     @Test

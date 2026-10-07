@@ -8,6 +8,15 @@ import org.junit.jupiter.api.Test;
 
 class TitleColorTest {
     @Test
+    void contrastingColorIsReadableOnTheColor() {
+        assertEquals(TitleColor.BLACK, TitleColor.contrasting(TitleColor.WHITE));
+        assertEquals(TitleColor.WHITE, TitleColor.contrasting(TitleColor.BLACK));
+        // Yellow is bright, dark red is not
+        assertEquals(TitleColor.BLACK, TitleColor.contrasting(0xE5E533));
+        assertEquals(TitleColor.WHITE, TitleColor.contrasting(0x993333));
+    }
+
+    @Test
     void parsesHexColors() {
         assertEquals(0xFFCC00, TitleColor.parse("ffcc00", TitleColor.WHITE));
         assertEquals(0xFFCC00, TitleColor.parse("FFCC00", TitleColor.WHITE));

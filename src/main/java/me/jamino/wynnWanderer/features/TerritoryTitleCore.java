@@ -2,6 +2,7 @@ package me.jamino.wynnWanderer.features;
 
 import com.wynntils.core.components.Models;
 import com.wynntils.models.territories.profile.TerritoryProfile;
+import java.util.List;
 import me.jamino.wynnWanderer.WynnWanderer;
 import me.jamino.wynnWanderer.config.WynnWandererConfig;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -9,6 +10,9 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FontDescription;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
 
 public class TerritoryTitleCore {
@@ -29,8 +33,16 @@ public class TerritoryTitleCore {
 
     /**
      * A title that is ready to be rendered. The subtitle is null if there is none to show.
+     *
+     * @param background true if the title is text on top of a background, see {@link TitleText}
      */
-    public record DisplayedTitle(Component title, Component subtitle, int color, boolean significant) {}
+    public record DisplayedTitle(
+            Component title,
+            Component subtitle,
+            int color,
+            int subtitleColor,
+            boolean background,
+            boolean significant) {}
 
     public void initialize() {
         // Register tick event to periodically check for territory changes
@@ -101,24 +113,55 @@ public class TerritoryTitleCore {
         TitleResolver.ResolvedTitle resolved =
                 TitleResolver.resolve(territoryName, config, key -> language.has(key) ? language.getOrDefault(key) : null);
 
-        Component title = Component.translatable(resolved.titleKey(), territoryName);
+        // The title can switch between the two colors of the territory, and between fonts
+        String titleText =
+                Component.translatable(resolved.titleKey(), territoryName).getString();
+        List<TitleText.Segment> segments = TitleText.split(titleText, resolved.color(), resolved.textColor());
+        Component title = toComponent(segments);
 
         // Only set subtitle if they are enabled and there is something to show
         Component subtitle = null;
         if (config.appearance.showSubtitles) {
-            subtitle = Component.translatable(resolved.subtitleKey(), territoryName);
+            String subtitleText =
+                    Component.translatable(resolved.subtitleKey(), territoryName).getString();
+            subtitle = toComponent(TitleText.split(subtitleText, resolved.subtitleColor(), resolved.subtitleColor()));
             if (subtitle.getString().isBlank()) {
                 subtitle = null;
             }
         }
 
         // Start displaying the title
-        displayedTitle = new DisplayedTitle(title, subtitle, resolved.color(), resolved.significant());
+        displayedTitle = new DisplayedTitle(
+                title,
+                subtitle,
+                resolved.color(),
+                resolved.subtitleColor(),
+                TitleText.hasBackground(segments),
+                resolved.significant());
         animation.start(
                 config.animation.textFadeInTime,
                 config.animation.textDisplayTime,
                 config.animation.textFadeOutTime,
                 config.animation.textCooldownTime);
+    }
+
+    private static Component toComponent(List<TitleText.Segment> segments) {
+        MutableComponent component = Component.empty();
+        for (TitleText.Segment segment : segments) {
+            Style style = Style.EMPTY.withColor(segment.color());
+
+            Identifier font = segment.font() == null ? null : Identifier.tryParse(segment.font());
+            if (font != null) {
+                style = style.withFont(new FontDescription.Resource(font));
+            }
+            // Only the background has a shadow, which would otherwise be drawn over it
+            if (segment.foreground()) {
+                style = style.withoutShadow();
+            }
+
+            component.append(Component.literal(segment.text()).withStyle(style));
+        }
+        return component;
     }
 
     /**

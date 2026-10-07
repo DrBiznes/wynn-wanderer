@@ -10,7 +10,9 @@ public class SignificantTerritoryManager {
     public static final Set<String> SIGNIFICANT_TERRITORIES = new HashSet<>(Arrays.asList(
             "Llevigar", "Gelibord", "Olux", "Rodoroc", "Eltom", "Cinfras", "Ahmsord",
             "Kandon-Beda", "Thesead", "Corkus City", "Selchar", "Nemract", "Almuj",
-            "Ragni", "Detlas", "Lutho", "Nesaak", "Troms", "Alekin"
+            "Ragni", "Detlas", "Lutho", "Nesaak", "Troms", "Alekin",
+            // Fruma
+            "Fort Torann", "Espren", "Timasca", "Aldwell", "Hyloch"
     ));
 
     public static boolean isSignificant(String territoryName) {

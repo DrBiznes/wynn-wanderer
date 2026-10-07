@@ -8,6 +8,7 @@ import me.shedaniel.autoconfig.AutoConfigClient;
 import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
 import net.fabricmc.fabric.api.client.gametest.v1.context.TestSingleplayerContext;
+import net.minecraft.network.chat.Component;
 
 /**
  * Starts the real client with Wynntils installed and checks that the mod loads, that the config
@@ -46,6 +47,8 @@ public class WynnWandererSmokeTest implements FabricClientGameTest {
         TerritoryTitleCore core = WynnWanderer.getTerritoryTitleCore();
 
         int fadeInTime = config.animation.textFadeInTime;
+        int displayTime = config.animation.textDisplayTime;
+        int fadeOutTime = config.animation.textFadeOutTime;
         int textXOffset = positioning.textXOffset;
         int textYOffset = positioning.textYOffset;
         int subtitleXOffset = positioning.subtitleXOffset;
@@ -70,13 +73,26 @@ public class WynnWandererSmokeTest implements FabricClientGameTest {
 
                 TerritoryTitleCore.DisplayedTitle title = core.getDisplayedTitle();
                 check(title != null && title.significant(), "Detlas was not displayed as a significant territory");
-                check("Detlas".equals(title.title().getString()), "Wrong title: " + title.title().getString());
+                check("DETLAS".equals(readPill(title.title())), "Wrong title: " + readPill(title.title()));
+                check(title.background(), "The title of Detlas is not a pill");
                 check(
                         "Heart of the Province".equals(title.subtitle().getString()),
                         "Wrong subtitle: " + title.subtitle().getString());
                 check(title.color() == 0x669933, "Wrong color: " + Integer.toHexString(title.color()));
             });
             checkRendersAndScreenshot(context, core, "wynn-wanderer-title-significant");
+
+            // With only a fade-out and the timers standing still, the title stays translucent. Its shadow
+            // is then drawn separately from its background.
+            context.runOnClient(client -> {
+                config.animation.textDisplayTime = 0;
+                config.animation.textFadeOutTime = 2;
+                core.displayTerritoryTitle("Detlas");
+                config.animation.textDisplayTime = displayTime;
+                config.animation.textFadeOutTime = fadeOutTime;
+            });
+            checkRendersAndScreenshot(context, core, "wynn-wanderer-title-fading");
+            context.runOnClient(client -> core.displayTerritoryTitle("Detlas"));
 
             // Top left of the screen, to check that position changes are picked up
             context.runOnClient(client -> {
@@ -133,6 +149,20 @@ public class WynnWandererSmokeTest implements FabricClientGameTest {
         context.takeScreenshot(name);
         context.runOnClient(client -> check(
                 core.getTerritoryRenderer().getRenderCount() > renderCount, "The title was not rendered: " + name));
+    }
+
+    /**
+     * City titles are written in the Wynncraft pill font, which has its letters at U+E000 and their
+     * backgrounds after them.
+     */
+    private static String readPill(Component text) {
+        StringBuilder letters = new StringBuilder();
+        for (char c : text.getString().toCharArray()) {
+            if (c >= 0xE000 && c <= 0xE019) {
+                letters.append((char) ('A' + c - 0xE000));
+            }
+        }
+        return letters.toString();
     }
 
     private static void check(boolean condition, String message) {

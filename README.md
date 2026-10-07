@@ -60,6 +60,22 @@ In `assets/wynn-wanderer/lang/en_us.json`:
 }
 ```
 
+Replacing a title this way also replaces the pill it is drawn in by default, so nothing else has to be overridden. The image is tinted with the color of the territory, set it to white to keep the colors of the image:
+
+```json
+{
+  "wynn_wanderer.territory.ragni.color": "ffffff"
+}
+```
+
+#### Colors and fonts of the default titles
+
+Each significant territory has three colors: `.color` (the pill), `.text_color` (the letters on the pill) and `.subtitle_color`. Titles and subtitles can use these codes on top of the regular formatting codes:
+
+- `§r` switches to `.color`
+- `§t` switches to `.text_color`, for text that is drawn on top of a background. Titles using it only get a shadow for their background.
+- `§{namespace:font}` switches to a font, such as the `minecraft:banner/pill` font of the Wynncraft resource pack, and `§{}` back to the default font
+
 ### Step 4: Define Font Mappings
 
 In `assets/minecraft/font/default.json`:
