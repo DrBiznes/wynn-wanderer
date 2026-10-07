@@ -3,6 +3,7 @@
   "text.autoconfig.wynn-wanderer.option.territoryTitles": "Territory Titles",
   "text.autoconfig.wynn-wanderer.option.territoryTitles.@Tooltip": "Settings for territory title display",
   "text.autoconfig.wynn-wanderer.option.territoryTitles.enabled": "Enable Territory Titles",
+  "text.autoconfig.wynn-wanderer.option.territoryTitles.enabled.@Tooltip": "Whether to show a title when entering a territory",
 
   "text.autoconfig.wynn-wanderer.option.territoryTitles.showOnlySignificantTerritories": "Show Only Significant Territories",
   "text.autoconfig.wynn-wanderer.option.territoryTitles.showOnlySignificantTerritories.@Tooltip[0]": "When enabled, only major cities and important locations will show titles",

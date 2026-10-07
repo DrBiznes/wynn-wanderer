@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "wynn-wanderer-gametest",
+  "version": "1.0.0",
+  "name": "Wynn Wanderer Game Tests",
+  "description": "In-game smoke tests for Wynn Wanderer",
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "fabric-client-gametest": [
+      "me.jamino.wynnWanderer.gametest.WynnWandererSmokeTest"
+    ]
+  },
+  "depends": {
+    "wynn-wanderer": "*",
+    "wynntils": "*",
+    "fabric-client-gametest-api-v1": "*"
+  }
+}

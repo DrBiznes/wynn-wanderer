@@ -139,14 +139,29 @@ Consider creating images for these significant territories:
 
 ## Installation
 
-1. Install Fabric Loader and Fabric API
-2. Install Wynntils
+1. Install Fabric Loader and Fabric API for Minecraft 1.21.11
+2. Install Wynntils and Cloth Config
 3. Place the WynnWanderer JAR in your mods folder
 4. Launch Minecraft
 
 ## Configuration
 
-Access the configuration screen through the Mod Menu interface when using Fabric.
+Access the configuration screen through the Mod Menu interface when using Fabric. The position of the title and subtitle is set in the "Position Settings" section.
+
+## Development
+
+The mod uses the official Mojang mappings and needs JDK 21.
+
+```
+./gradlew build              # builds the mod and runs the unit tests
+./gradlew test               # unit tests only
+./gradlew runClientGameTest  # in-game smoke tests
+```
+
+- **Unit tests** (`src/test`) cover the title logic that does not need the game: animation timing, territory tracking, title placement, title and color selection, and the language and mod metadata files.
+- **Smoke tests** (`src/gametest`) start a real client with Wynntils installed and check that the mod loads, the config screen opens, and titles render where the config says. Screenshots are saved to `build/run/clientGameTest/screenshots`.
+
+The Wynntils version the mod is built against is set in `gradle.properties`.
 
 ## License
 

@@ -2,6 +2,7 @@ package me.jamino.wynnWanderer.features;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 public class SignificantTerritoryManager {
@@ -11,4 +12,15 @@ public class SignificantTerritoryManager {
             "Kandon-Beda", "Thesead", "Corkus City", "Selchar", "Nemract", "Almuj",
             "Ragni", "Detlas", "Lutho", "Nesaak", "Troms", "Alekin"
     ));
+
+    public static boolean isSignificant(String territoryName) {
+        return SIGNIFICANT_TERRITORIES.contains(territoryName);
+    }
+
+    /**
+     * @return The translation key prefix for the territory, e.g. "wynn_wanderer.territory.corkus_city"
+     */
+    public static String getTranslationKey(String territoryName) {
+        return TitleResolver.KEY_PREFIX + territoryName.toLowerCase(Locale.ROOT).replace(" ", "_");
+    }
 }

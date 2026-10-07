@@ -1,7 +1,5 @@
 package me.jamino.wynnWanderer.features;
 
-import com.wynntils.models.territories.profile.TerritoryProfile;
-
 import java.util.LinkedList;
 import java.util.function.Predicate;
 
@@ -10,7 +8,7 @@ import java.util.function.Predicate;
  * repeated title displays when crossing the same territories repeatedly.
  */
 public class TerritoryCache {
-    private final LinkedList<TerritoryProfile> recentEntries = new LinkedList<>();
+    private final LinkedList<String> recentEntries = new LinkedList<>();
     private int cacheSize = 3;
 
     /**
@@ -25,9 +23,9 @@ public class TerritoryCache {
     /**
      * Adds a territory to the cache of recently visited territories.
      *
-     * @param entry The territory profile to add
+     * @param entry The friendly name of the territory to add
      */
-    public void addEntry(TerritoryProfile entry) {
+    public void addEntry(String entry) {
         // Avoid adding duplicates if it's already the last entry
         if (!recentEntries.isEmpty() && recentEntries.getLast().equals(entry)) {
             return;
@@ -50,7 +48,7 @@ public class TerritoryCache {
      * @param entryMatchPredicate Predicate to test entries against
      * @return true if any entry matches the predicate, false otherwise
      */
-    public boolean matchesAnyEntry(Predicate<TerritoryProfile> entryMatchPredicate) {
+    public boolean matchesAnyEntry(Predicate<String> entryMatchPredicate) {
         // Check if the predicate matches any entry in the current list
         return recentEntries.stream().anyMatch(entryMatchPredicate);
     }
