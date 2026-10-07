@@ -15,6 +15,8 @@ import me.jamino.wynnWanderer.config.WynnWandererConfig;
 import me.jamino.wynnWanderer.features.SignificantTerritoryManager;
 import me.jamino.wynnWanderer.features.TitleColor;
 import me.jamino.wynnWanderer.features.TitleResolver;
+import me.jamino.wynnWanderer.wynntils.TerritoryTitleOverlay;
+import me.jamino.wynnWanderer.wynntils.WynnWandererFeature;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import org.junit.jupiter.api.Test;
 
@@ -61,6 +63,20 @@ class LangFileTest {
     void genericTitlesHaveAPlaceholderForTheTerritoryName() {
         assertTrue(lang.get(TitleResolver.ENTERING_TITLE_KEY).contains("%s"));
         assertTrue(lang.get(TitleResolver.SIGNIFICANT_TITLE_KEY).contains("%s"));
+    }
+
+    /**
+     * Wynntils derives these keys from the class names of the feature and overlay, and refuses to
+     * start in a development environment if they are missing.
+     */
+    @Test
+    void wynntilsFeatureAndOverlayAreTranslated() {
+        String featureKey = "feature.wynntils." + lowerCamel(WynnWandererFeature.class, "Feature");
+        String overlayKey = featureKey + ".overlay." + lowerCamel(TerritoryTitleOverlay.class, "Overlay");
+
+        assertFalse(lang.getOrDefault(featureKey + ".name", "").isBlank(), featureKey + ".name");
+        assertFalse(lang.getOrDefault(featureKey + ".description", "").isBlank(), featureKey + ".description");
+        assertFalse(lang.getOrDefault(overlayKey + ".name", "").isBlank(), overlayKey + ".name");
     }
 
     @Test
@@ -112,5 +128,10 @@ class LangFileTest {
                 collectOptionKeys(field.getType(), key + ".", keys);
             }
         }
+    }
+
+    private static String lowerCamel(Class<?> clazz, String suffix) {
+        String name = clazz.getSimpleName().replace(suffix, "");
+        return Character.toLowerCase(name.charAt(0)) + name.substring(1);
     }
 }

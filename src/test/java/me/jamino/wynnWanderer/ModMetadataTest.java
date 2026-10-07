@@ -61,6 +61,8 @@ class ModMetadataTest {
                 mixinJson.getAsJsonArray(side).forEach(element -> mixins.add(element.getAsString()));
             }
 
+            // The overlay is only registered with Wynntils through a mixin
+            assertFalse(mixins.isEmpty(), "No mixins in " + mixinConfig.getAsString());
             for (String mixin : mixins) {
                 assertClassExists(mixinPackage + "." + mixin);
             }

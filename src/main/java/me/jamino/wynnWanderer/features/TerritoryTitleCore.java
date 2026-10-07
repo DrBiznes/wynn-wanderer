@@ -5,11 +5,9 @@ import com.wynntils.models.territories.profile.TerritoryProfile;
 import me.jamino.wynnWanderer.WynnWanderer;
 import me.jamino.wynnWanderer.config.WynnWandererConfig;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 
 public class TerritoryTitleCore {
     private static final int CHECK_INTERVAL_TICKS = 10;
@@ -21,10 +19,7 @@ public class TerritoryTitleCore {
     // Tracks the current and recently visited territories
     private final TerritoryTracker territoryTracker = new TerritoryTracker(3);
 
-    // Title renderer for visualization
-    private final TerritoryRenderer territoryRenderer = new TerritoryRenderer(this);
-
-    // The title being displayed
+    // The title being displayed, rendered by the Wynntils overlay
     private DisplayedTitle displayedTitle = null;
 
     /**
@@ -35,10 +30,6 @@ public class TerritoryTitleCore {
     public void initialize() {
         // Register tick event to periodically check for territory changes
         ClientTickEvents.END_CLIENT_TICK.register(this::tick);
-
-        // Register HUD element to render the title
-        HudElementRegistry.addLast(
-                Identifier.fromNamespaceAndPath("wynn-wanderer", "territory_title"), territoryRenderer::renderTitle);
     }
 
     private void tick(Minecraft client) {
@@ -126,10 +117,6 @@ public class TerritoryTitleCore {
      */
     public DisplayedTitle getDisplayedTitle() {
         return displayedTitle;
-    }
-
-    public TerritoryRenderer getTerritoryRenderer() {
-        return territoryRenderer;
     }
 
     public TitleAnimation getAnimation() {

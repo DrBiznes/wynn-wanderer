@@ -28,7 +28,8 @@ public class WynnWanderer implements ClientModInitializer {
             return InteractionResult.SUCCESS;
         });
 
-        // Initialize the territory title core
+        // Initialize the territory title core. The title itself is rendered by the
+        // overlay that FeatureManagerMixin registers with Wynntils.
         territoryTitleCore = new TerritoryTitleCore();
         territoryTitleCore.initialize();
 

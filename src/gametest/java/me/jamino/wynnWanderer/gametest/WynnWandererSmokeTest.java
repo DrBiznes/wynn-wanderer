@@ -1,34 +1,106 @@
 package me.jamino.wynnWanderer.gametest;
 
-import com.wynntils.core.components.Models;
+import com.wynntils.core.components.Managers;
+import com.wynntils.core.consumers.overlays.OverlayPosition;
+import com.wynntils.screens.overlays.placement.OverlayManagementScreen;
+import com.wynntils.utils.render.type.HorizontalAlignment;
+import com.wynntils.utils.render.type.VerticalAlignment;
 import me.jamino.wynnWanderer.WynnWanderer;
 import me.jamino.wynnWanderer.config.WynnWandererConfig;
 import me.jamino.wynnWanderer.features.TerritoryTitleCore;
+import me.jamino.wynnWanderer.wynntils.TerritoryTitleOverlay;
+import me.jamino.wynnWanderer.wynntils.WynnWandererFeature;
 import me.shedaniel.autoconfig.AutoConfigClient;
 import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
 import net.fabricmc.fabric.api.client.gametest.v1.context.TestSingleplayerContext;
 
 /**
- * Starts the real client with Wynntils installed and checks that the mod loads, that the config
- * screen opens, and that territory titles render without crashing.
+ * Starts the real client with Wynntils installed and checks that the mod loads, that the territory
+ * title overlay is registered with the Wynntils overlay manager, and that it renders without crashing.
  * <p>
  * Run with {@code gradlew runClientGameTest}. Screenshots are saved to build/run/clientGameTest/screenshots.
  */
 public class WynnWandererSmokeTest implements FabricClientGameTest {
+    // Wynntils downloads its data before it initializes features, which can take a while
+    private static final int WYNNTILS_INIT_TIMEOUT_TICKS = 20 * 120;
+
     @Override
     public void runTest(ClientGameTestContext context) {
         modIsInitialized(context);
+        overlayIsRegisteredWithWynntils(context);
+        overlayCanBeMovedWithTheOverlayManager(context);
         configScreenOpens(context);
-        titlesRenderInWorld(context);
+        overlayRendersInWorld(context);
     }
 
     private void modIsInitialized(ClientGameTestContext context) {
         context.runOnClient(client -> {
             check(WynnWanderer.getTerritoryTitleCore() != null, "The territory title core was not initialized");
             check(WynnWanderer.getConfig() != null, "The config was not loaded");
-            // The territories come from Wynntils, make sure the parts of it we use are there
-            check(Models.Territory != null && Models.WorldState != null, "Wynntils was not initialized");
+        });
+    }
+
+    private void overlayIsRegisteredWithWynntils(ClientGameTestContext context) {
+        // Wynntils initializes its features once resources have finished loading
+        context.waitFor(client -> WynnWandererFeature.getInstance() != null, WYNNTILS_INIT_TIMEOUT_TICKS);
+
+        context.runOnClient(client -> {
+            WynnWandererFeature feature = WynnWandererFeature.getInstance();
+            TerritoryTitleOverlay overlay = feature.getTerritoryTitleOverlay();
+
+            check(
+                    Managers.Feature.getFeatureInstance(WynnWandererFeature.class) == feature,
+                    "The feature is not registered with the Wynntils feature manager");
+            check(feature.isEnabled(), "The feature is not enabled");
+
+            check(Managers.Overlay.getOverlays().contains(overlay), "The overlay is not registered with Wynntils");
+            check(Managers.Overlay.getOverlayParent(overlay) == feature, "The overlay has the wrong parent feature");
+            check(Managers.Overlay.isEnabled(overlay), "The overlay is not enabled");
+            check(
+                    Managers.Overlay.getRenderMap().values().stream().anyMatch(overlays -> overlays.contains(overlay)),
+                    "The overlay is not in the Wynntils render order");
+
+            // These are what the Wynntils config manager saves and loads, so without them the position is lost
+            for (String option : new String[] {"position", "size", "userEnabled"}) {
+                check(
+                        overlay.getConfigOptionFromString(option).isPresent(),
+                        "Wynntils did not register the overlay config option " + option);
+            }
+
+            check(
+                    "Wynn Wanderer".equals(feature.getTranslatedName()),
+                    "The feature name is not translated: " + feature.getTranslatedName());
+            check(
+                    !feature.getTranslatedDescription().startsWith("feature.wynntils."),
+                    "The feature description is not translated");
+            check(
+                    "Territory Title".equals(overlay.getTranslatedName()),
+                    "The overlay name is not translated: " + overlay.getTranslatedName());
+        });
+    }
+
+    private void overlayCanBeMovedWithTheOverlayManager(ClientGameTestContext context) {
+        context.runOnClient(client -> {
+            TerritoryTitleOverlay overlay = WynnWandererFeature.getInstance().getTerritoryTitleOverlay();
+            OverlayPosition original = overlay.getPosition();
+            check(original != null, "The overlay has no position");
+
+            float originalX = overlay.getRenderX();
+            float originalY = overlay.getRenderY();
+
+            // This is what dragging the overlay in the Wynntils overlay manager does
+            overlay.setPosition(new OverlayPosition(
+                    original.getVerticalOffset() + 25,
+                    original.getHorizontalOffset() + 40,
+                    original.getVerticalAlignment(),
+                    original.getHorizontalAlignment(),
+                    original.getAnchorSection()));
+
+            check(overlay.getRenderX() == originalX + 40, "Moving the overlay did not change where it renders");
+            check(overlay.getRenderY() == originalY + 25, "Moving the overlay did not change where it renders");
+
+            overlay.setPosition(original);
         });
     }
 
@@ -40,32 +112,66 @@ public class WynnWandererSmokeTest implements FabricClientGameTest {
         context.setScreen(() -> null);
     }
 
-    private void titlesRenderInWorld(ClientGameTestContext context) {
-        WynnWandererConfig.TerritoryTitlesConfig config = WynnWanderer.getConfig().territoryTitles;
-        WynnWandererConfig.TerritoryTitlesConfig.PositioningConfig positioning = config.positioning;
-        TerritoryTitleCore core = WynnWanderer.getTerritoryTitleCore();
-
-        int fadeInTime = config.animation.textFadeInTime;
-        int textXOffset = positioning.textXOffset;
-        int textYOffset = positioning.textYOffset;
-        int subtitleXOffset = positioning.subtitleXOffset;
-        int subtitleYOffset = positioning.subtitleYOffset;
-        boolean centerText = positioning.centerText;
-
-        // The HUD is only rendered while in a world
+    private void overlayRendersInWorld(ClientGameTestContext context) {
+        // Wynntils only renders overlays while in a world
         try (TestSingleplayerContext singleplayer = context.worldBuilder().create()) {
             singleplayer.getClientWorld().waitForChunksRender();
 
-            context.runOnClient(client -> {
-                // The title timers only run on Wynncraft, so skip the fade-in to get a fully opaque title
-                config.animation.textFadeInTime = 0;
-                // The default offsets are meant for larger windows than the one the tests run in
-                positioning.centerText = true;
-                positioning.textXOffset = 0;
-                positioning.textYOffset = -80;
-                positioning.subtitleXOffset = 0;
-                positioning.subtitleYOffset = -50;
+            overlayRendersInTheOverlayManager(context);
+            overlayRendersTerritoryTitles(context);
+        } finally {
+            RenderHook.setMode(RenderHook.Mode.NONE);
+        }
+    }
 
+    private void overlayRendersInTheOverlayManager(ClientGameTestContext context) {
+        TerritoryTitleOverlay overlay = WynnWandererFeature.getInstance().getTerritoryTitleOverlay();
+        OverlayPosition original = context.computeOnClient(client -> overlay.getPosition());
+
+        // The Wynntils overlay manager renders a preview of the selected overlay
+        context.setScreen(() -> OverlayManagementScreen.create(null, overlay));
+        RenderHook.setMode(RenderHook.Mode.WYNNTILS_RENDER_EVENT);
+        context.waitTicks(20);
+        context.takeScreenshot("wynn-wanderer-overlay-manager");
+
+        context.runOnClient(client -> {
+            check(client.screen instanceof OverlayManagementScreen, "The Wynntils overlay manager did not open");
+            checkRendered(overlay);
+            check(overlay.getPreviewRenderCount() > 0, "Wynntils never rendered the overlay preview");
+        });
+
+        // Top left of the screen instead of the default, to check that position and alignment changes are picked up
+        int previewRenderCount = context.computeOnClient(client -> {
+            overlay.setPosition(new OverlayPosition(
+                    10, 10, VerticalAlignment.TOP, HorizontalAlignment.LEFT, OverlayPosition.AnchorSection.TOP_LEFT));
+            return overlay.getPreviewRenderCount();
+        });
+        context.waitTicks(5);
+        context.takeScreenshot("wynn-wanderer-overlay-manager-moved");
+
+        context.runOnClient(client -> {
+            checkRendered(overlay);
+            check(
+                    overlay.getPreviewRenderCount() > previewRenderCount,
+                    "Wynntils stopped rendering the overlay preview after it was moved");
+            overlay.setPosition(original);
+        });
+
+        context.setScreen(() -> null);
+    }
+
+    private void overlayRendersTerritoryTitles(ClientGameTestContext context) {
+        TerritoryTitleOverlay overlay = WynnWandererFeature.getInstance().getTerritoryTitleOverlay();
+        WynnWandererConfig.TerritoryTitlesConfig config = WynnWanderer.getConfig().territoryTitles;
+        TerritoryTitleCore core = WynnWanderer.getTerritoryTitleCore();
+
+        // The title timers only run on Wynncraft, so skip the fade-in to get a fully opaque title
+        int fadeInTime = config.animation.textFadeInTime;
+        boolean onlySignificant = config.showOnlySignificantTerritories;
+
+        try {
+            context.runOnClient(client -> {
+                config.animation.textFadeInTime = 0;
                 core.displayTerritoryTitle("Detlas");
 
                 TerritoryTitleCore.DisplayedTitle title = core.getDisplayedTitle();
@@ -76,23 +182,13 @@ public class WynnWandererSmokeTest implements FabricClientGameTest {
                         "Wrong subtitle: " + title.subtitle().getString());
                 check(title.color() == 0x669933, "Wrong color: " + Integer.toHexString(title.color()));
             });
-            checkRendersAndScreenshot(context, core, "wynn-wanderer-title-significant");
 
-            // Top left of the screen, to check that position changes are picked up
-            context.runOnClient(client -> {
-                positioning.centerText = false;
-                positioning.textXOffset = 10;
-                positioning.textYOffset = 10;
-                positioning.subtitleXOffset = 10;
-                positioning.subtitleYOffset = 40;
-            });
-            checkRendersAndScreenshot(context, core, "wynn-wanderer-title-moved");
+            RenderHook.setMode(RenderHook.Mode.OVERLAY);
+            context.waitTicks(10);
+            context.takeScreenshot("wynn-wanderer-title-significant");
+            context.runOnClient(client -> checkRendered(overlay));
 
             context.runOnClient(client -> {
-                positioning.centerText = true;
-                positioning.textXOffset = 0;
-                positioning.textYOffset = -80;
-
                 core.displayTerritoryTitle("Nivla Woods");
 
                 TerritoryTitleCore.DisplayedTitle title = core.getDisplayedTitle();
@@ -102,37 +198,27 @@ public class WynnWandererSmokeTest implements FabricClientGameTest {
                         "Wrong title: " + title.title().getString());
                 check(title.subtitle() == null, "Regular territories should not have a subtitle");
             });
-            checkRendersAndScreenshot(context, core, "wynn-wanderer-title-regular");
 
-            // Nothing is rendered once the title is cleared
-            context.runOnClient(client -> core.clearTimer());
-            context.waitTicks(2);
-            int renderCount = context.computeOnClient(
-                    client -> core.getTerritoryRenderer().getRenderCount());
-            context.waitTicks(5);
-            context.runOnClient(client -> check(
-                    core.getTerritoryRenderer().getRenderCount() == renderCount,
-                    "A title was rendered after it was cleared"));
+            RenderHook.setMode(RenderHook.Mode.OVERLAY);
+            context.waitTicks(10);
+            context.takeScreenshot("wynn-wanderer-title-regular");
+            context.runOnClient(client -> checkRendered(overlay));
         } finally {
             context.runOnClient(client -> {
                 config.animation.textFadeInTime = fadeInTime;
-                positioning.textXOffset = textXOffset;
-                positioning.textYOffset = textYOffset;
-                positioning.subtitleXOffset = subtitleXOffset;
-                positioning.subtitleYOffset = subtitleYOffset;
-                positioning.centerText = centerText;
+                config.showOnlySignificantTerritories = onlySignificant;
                 core.clearTimer();
             });
         }
     }
 
-    private void checkRendersAndScreenshot(ClientGameTestContext context, TerritoryTitleCore core, String name) {
-        int renderCount = context.computeOnClient(
-                client -> core.getTerritoryRenderer().getRenderCount());
-        context.waitTicks(10);
-        context.takeScreenshot(name);
-        context.runOnClient(client -> check(
-                core.getTerritoryRenderer().getRenderCount() > renderCount, "The title was not rendered: " + name));
+    private static void checkRendered(TerritoryTitleOverlay overlay) {
+        if (RenderHook.getFailure() != null) {
+            throw new AssertionError("Rendering the overlay threw an exception", RenderHook.getFailure());
+        }
+        check(RenderHook.getRenderCount() > 0, "The HUD was never rendered");
+        // Wynntils disables overlays that throw while rendering
+        check(Managers.Overlay.isEnabled(overlay), "The overlay crashed while rendering and was disabled by Wynntils");
     }
 
     private static void check(boolean condition, String message) {

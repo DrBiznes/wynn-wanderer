@@ -5,7 +5,8 @@ WynnWanderer is a Fabric mod for Wynncraft that displays territory titles when c
 ## Features
 
 - Elegant territory title displays when crossing borders
-- Configurable animation, position, and text styling
+- Configurable animation and text styling
+- Title position managed by the Wynntils overlay manager, like any other Wynntils overlay
 - Support for special styling of major cities and important locations
 - Compatibility with Wynntils
 
@@ -146,7 +147,9 @@ Consider creating images for these significant territories:
 
 ## Configuration
 
-Access the configuration screen through the Mod Menu interface when using Fabric. The position of the title and subtitle is set in the "Position Settings" section.
+**Position**: the title is a Wynntils overlay called "Territory Title" (under the "Wynn Wanderer" feature). Move, align, and enable or disable it from the Wynntils overlay manager, the same way as the built-in overlays.
+
+**Everything else** (text size, colors, shadow, subtitles, timings, significant territories): use the Wynn Wanderer configuration screen, available through Mod Menu.
 
 ## Development
 
@@ -158,10 +161,10 @@ The mod uses the official Mojang mappings and needs JDK 21.
 ./gradlew runClientGameTest  # in-game smoke tests
 ```
 
-- **Unit tests** (`src/test`) cover the title logic that does not need the game: animation timing, territory tracking, title placement, title and color selection, and the language and mod metadata files.
-- **Smoke tests** (`src/gametest`) start a real client with Wynntils installed and check that the mod loads, the config screen opens, and titles render where the config says. Screenshots are saved to `build/run/clientGameTest/screenshots`.
+- **Unit tests** (`src/test`) cover the title logic that does not need the game: animation timing, territory tracking, title and color selection, and the language and mod metadata files.
+- **Smoke tests** (`src/gametest`) start a real client with Wynntils installed and check that the overlay is registered with the Wynntils overlay manager, can be moved, and renders. Screenshots are saved to `build/run/clientGameTest/screenshots`.
 
-The Wynntils version the mod is built against is set in `gradle.properties`.
+The Wynntils version the mod is built against is set in `gradle.properties`. The overlay is registered through a mixin into the Wynntils feature manager (`FeatureManagerMixin`), so run the smoke tests after bumping it.
 
 ## License
 

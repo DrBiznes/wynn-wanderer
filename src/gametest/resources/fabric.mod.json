@@ -7,6 +7,9 @@
   "license": "MIT",
   "environment": "client",
   "entrypoints": {
+    "client": [
+      "me.jamino.wynnWanderer.gametest.RenderHook"
+    ],
     "fabric-client-gametest": [
       "me.jamino.wynnWanderer.gametest.WynnWandererSmokeTest"
     ]

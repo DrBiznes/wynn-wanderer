@@ -17,13 +17,10 @@ public class WynnWandererConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip(count = 2)
         public boolean showOnlySignificantTerritories = true;  // New option, default to true
 
+        // The position of the title is managed by the Wynntils overlay manager
         @ConfigEntry.Gui.CollapsibleObject
         @ConfigEntry.Gui.Tooltip
         public AppearanceConfig appearance = new AppearanceConfig();
-
-        @ConfigEntry.Gui.CollapsibleObject
-        @ConfigEntry.Gui.Tooltip
-        public PositioningConfig positioning = new PositioningConfig();
 
         @ConfigEntry.Gui.CollapsibleObject
         @ConfigEntry.Gui.Tooltip
@@ -48,23 +45,6 @@ public class WynnWandererConfig implements ConfigData {
 
             @ConfigEntry.Gui.Tooltip
             public boolean showSubtitles = true;  // New option to show/hide subtitles
-        }
-
-        public static class PositioningConfig {
-            @ConfigEntry.Gui.Tooltip(count = 3)
-            public int textYOffset = -300;  // Updated default to move title up more
-
-            @ConfigEntry.Gui.Tooltip(count = 3)
-            public int textXOffset = 0;
-
-            @ConfigEntry.Gui.Tooltip(count = 3)
-            public int subtitleYOffset = -240;  // Adjusted to be below the title
-
-            @ConfigEntry.Gui.Tooltip(count = 3)
-            public int subtitleXOffset = 0;
-
-            @ConfigEntry.Gui.Tooltip(count = 3)
-            public boolean centerText = true;
         }
 
         public static class AnimationConfig {

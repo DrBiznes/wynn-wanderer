@@ -1,11 +1,12 @@
 {
-  "required": true,
+  "required": false,
   "minVersion": "0.8",
   "package": "me.jamino.wynnWanderer.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
   ],
   "client": [
+    "FeatureManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
