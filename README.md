@@ -14,7 +14,7 @@ WynnWanderer is a Minecraft mod that pops up a title when you cross into a new t
 - Configurable position, so you can put the title wherever you want it on screen
 - Configurable fade in, display, fade out and cooldown times
 - Remembers the last few territories you visited so it doesn't spam you when you stand on a border
-- Works with custom title resource packs, see the [resource pack guide](docs/RESOURCE_PACKS.md) to make your own
+- Works with custom title resource packs, see the [resource pack guide](https://github.com/DrBiznes/wynn-wanderer/blob/master/docs/RESOURCE_PACKS.md) to make your own
 - Configurable settings via Mod Menu or config file
 
 ## See It
@@ -48,7 +48,7 @@ You can configure WynnWanderer using Mod Menu. The position of the title and sub
 
 ## Custom Titles
 
-Want your own title art? WynnWanderer picks up resource packs that replace any city title with your own image. How to make one is in the [resource pack guide](docs/RESOURCE_PACKS.md).
+Want your own title art? WynnWanderer picks up resource packs that replace any city title with your own image. How to make one is in the [resource pack guide](https://github.com/DrBiznes/wynn-wanderer/blob/master/docs/RESOURCE_PACKS.md).
 
 ## Go Ham
 
