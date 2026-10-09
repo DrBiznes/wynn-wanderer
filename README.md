@@ -1,172 +1,62 @@
 # WynnWanderer
 
-WynnWanderer is a Fabric mod for Wynncraft that displays territory titles when crossing borders, enhancing your exploration experience with elegant, non-intrusive notifications.
 
-## Features
 
-- Elegant territory title displays when crossing borders
-- Configurable animation, position, and text styling
-- Support for special styling of major cities and important locations
-- Compatibility with Wynntils
+Every city deserves an entrance. WynnWanderer is a Minecraft mod that pops up a title when you cross into a new territory on Wynncraft, with the full pill treatment for all 24 major cities from Ragni to Hyloch. Made for my modpack [World of Wynncraft](https://modrinth.com/modpack/world-of-wynncraft), inspired by [Traveler's Titles](https://www.curseforge.com/minecraft/mc-mods/travelers-titles)
 
-## Creating Custom Title Resource Packs
 
-WynnWanderer supports custom image-based titles through resource packs using Minecraft's font system.
 
-### Basic Resource Pack Structure
+## What's Up
 
-```
-your_resource_pack/
-├── pack.mcmeta
-└── assets/
-    ├── wynn-wanderer/
-    │   ├── lang/
-    │   │   └── en_us.json
-    │   └── textures/
-    │       └── font/
-    │           ├── ragni.png
-    │           ├── detlas.png
-    │           └── ... (more title images)
-    └── minecraft/
-        └── font/
-            └── default.json
-```
+- Shows a title when you cross a territory border, using the territory data from Wynntils
+- Pill titles for all **24 major cities**, including the Fruma ones, each in its own city color
+- Everywhere else gets a plain "Entering ..." title, or turn that off and only get the cities
+- Subtitles for the cities, which you can turn off
+- Configurable text size, color and shadow
+- Configurable position, so you can put the title wherever you want it on screen
+- Configurable fade in, display, fade out and cooldown times
+- Remembers the last few territories you visited so it doesn't spam you when you stand on a border
+- Works with custom title resource packs, see the [resource pack guide](docs/RESOURCE_PACKS.md) to make your own
+- Configurable settings via Mod Menu or config file
 
-### Step 1: Create pack.mcmeta
+## See It
 
-```json
-{
-  "pack": {
-    "pack_format": 34,
-    "description": "WynnWanderer Visual Titles"
-  }
-}
-```
+Every city title in the mod:
 
-### Step 2: Create Title Images
 
-Create PNG images for each territory with transparent backgrounds. Recommended size is around 256x64 pixels, but you can adjust based on your preference.
 
-### Step 3: Map Territories to Unicode Characters
-
-In `assets/wynn-wanderer/lang/en_us.json`:
-
-```json
-{
-  "wynn_wanderer.territory.ragni.title": "\uE001",
-  "wynn_wanderer.territory.detlas.title": "\uE002",
-  "wynn_wanderer.territory.almuj.title": "\uE003",
-  "wynn_wanderer.territory.llevigar.title": "\uE004"
-}
-```
-
-Replacing a title this way also replaces the pill it is drawn in by default, so nothing else has to be overridden. The image is tinted with the color of the territory, set it to white to keep the colors of the image:
-
-```json
-{
-  "wynn_wanderer.territory.ragni.color": "ffffff"
-}
-```
-
-#### Colors and fonts of the default titles
-
-Each significant territory has three colors: `.color` (the pill), `.text_color` (the letters on the pill) and `.subtitle_color`. Titles and subtitles can use these codes on top of the regular formatting codes:
-
-- `§r` switches to `.color`
-- `§t` switches to `.text_color`, for text that is drawn on top of a background. Titles using it only get a shadow for their background.
-- `§{namespace:font}` switches to a font, such as the `minecraft:banner/pill` font of the Wynncraft resource pack, and `§{}` back to the default font
-
-### Step 4: Define Font Mappings
-
-In `assets/minecraft/font/default.json`:
-
-```json
-{
-  "providers": [
-    {
-      "type": "bitmap",
-      "file": "wynn-wanderer:textures/font/ragni.png",
-      "ascent": 15,
-      "height": 30,
-      "chars": ["\uE001"]
-    },
-    {
-      "type": "bitmap",
-      "file": "wynn-wanderer:textures/font/detlas.png",
-      "ascent": 15,
-      "height": 30,
-      "chars": ["\uE002"]
-    },
-    {
-      "type": "bitmap",
-      "file": "wynn-wanderer:textures/font/almuj.png",
-      "ascent": 15,
-      "height": 30,
-      "chars": ["\uE003"]
-    },
-    {
-      "type": "bitmap",
-      "file": "wynn-wanderer:textures/font/llevigar.png",
-      "ascent": 15,
-      "height": 30,
-      "chars": ["\uE004"]
-    }
-  ]
-}
-```
-
-### Font Definition Parameters
-
-- **file**: Path to your image file
-- **ascent**: Controls vertical positioning (higher values move the image up)
-- **height**: Height of your image in pixels
-- **chars**: Unicode character(s) to replace with this image
-
-### Design Tips
-
-- Use transparent backgrounds for seamless display
-- Maintain consistent visual style across all title images
-- Use Unicode points in the Private Use Area (E000-F8FF) to avoid conflicts
-- Test with different screen resolutions
-- You can create versions for different languages by using language-specific suffixes on filenames
-
-### Important Territories
-
-Consider creating images for these significant territories:
-
-- Llevigar
-- Detlas
-- Ragni
-- Almuj
-- Cinfras
-- Thesead
-- Troms
-- Eltom
-- Olux
-- Ahmsord
-- Gelibord
-- Rodoroc
-- Corkus City
-- Kandon-Beda
-- Selchar
-- Nemract
-- Lutho
-- Nesaak
+Colors come from the city, so Ragni is red and Corkus City is yellow like you'd expect!!
 
 ## Installation
 
-1. Install Fabric Loader and Fabric API for Minecraft 1.21.11
-2. Install Wynntils and Cloth Config
-3. Place the WynnWanderer JAR in your mods folder
-4. Launch Minecraft
+1. Make sure you have Fabric Loader and Fabric API installed
+2. Download and install Wynntils and Cloth Config
+3. Download the latest version of WynnWanderer from the versions page
+4. Place the downloaded .jar file in your Minecraft mods folder
+5. Wander
 
 ## Configuration
 
-Access the configuration screen through the Mod Menu interface when using Fabric. The position of the title and subtitle is set in the "Position Settings" section.
+You can configure WynnWanderer using Mod Menu. The position of the title and subtitle is set in the "Position Settings" section, and "Show Only Significant Territories" is the one to turn off if you want a title for every territory and not just the cities.
 
-## Development
+## Requirements
 
-The mod uses the official Mojang mappings and needs JDK 21.
+- Minecraft 1.21.11
+- Fabric Loader 0.19.5 or higher
+- Fabric API
+- Wynntils 4.2.13 or higher
+- Cloth Config
+- Mod Menu (optional, it's how you get to the config screen)
+
+## Custom Titles
+
+Want your own title art? WynnWanderer picks up resource packs that replace any city title with your own image. How to make one is in the [resource pack guide](docs/RESOURCE_PACKS.md).
+
+## Go Ham
+
+- I don't know nothing about java so if you wanna fork this and fix this up go ham.
+- Feel free to use this in your modpack
+- It needs JDK 21 and the official Mojang mappings
 
 ```
 ./gradlew build              # builds the mod and runs the unit tests
@@ -176,8 +66,34 @@ The mod uses the official Mojang mappings and needs JDK 21.
 
 - **Unit tests** (`src/test`) cover the title logic that does not need the game: animation timing, territory tracking, title placement, title and color selection, and the language and mod metadata files.
 - **Smoke tests** (`src/gametest`) start a real client with Wynntils installed and check that the mod loads, the config screen opens, and titles render where the config says. Screenshots are saved to `build/run/clientGameTest/screenshots`.
+- The Wynntils version the mod is built against is set in `gradle.properties`.
+- The banner and images above are made by `marketing/make_images.py`
 
-The Wynntils version the mod is built against is set in `gradle.properties`.
+## Acknowledgments
+
+- Thanks to the Wynntils team, this mod would know nothing about where you are without them
+- Thanks to the Traveler's Titles team for the idea
+- Thanks to the Wynncraft team for creating an awesome MMORPG experience in Minecraft
+- Thanks to shedaniel for Cloth Config
+
+## Support and My Mods
+Please report any bugs or feature suggestions on the Github Issues page, I'll be updating this frequently with community feedback and ideas! You can also [join my discord](https://discord.gg/jqFF64rXZZ) if you need direct support, or want to stay updated with all of my mods.
+### Check out all my projects!
+>   [World of Wynncraft Modpack](https://modrinth.com/modpack/world-of-wynncraft)
+
+>   [WynnWanderer](https://modrinth.com/mod/wynnwanderer)
+
+>   [WynnVista](https://modrinth.com/mod/wynnvista)
+
+>   [Wynn Weapon Bigger](https://modrinth.com/mod/wynnweaponbigger)
+
+>   [Nimble ReWynnded](https://modrinth.com/mod/nimble-rewynnded)
+
+>   [Class Keybind Profiles](https://modrinth.com/mod/class-keybind-profiles)
+
+>   [WynnBubbles](https://modrinth.com/mod/wynnbubbles)
+
+>   [WynnLODGrabber](https://modrinth.com/mod/wynnlodgrabber)
 
 ## License
 

@@ -6,6 +6,8 @@ package me.jamino.wynnWanderer.features;
 public final class TitleColor {
     public static final int WHITE = 0xFFFFFF;
     public static final int BLACK = 0x000000;
+    // How much of the brightness of a color its shadow keeps
+    private static final float SHADOW_BRIGHTNESS = 0.3f;
 
     private TitleColor() {}
 
@@ -42,6 +44,14 @@ public final class TitleColor {
         int blue = rgb & 0xFF;
         // Perceived brightness
         return (red * 299 + green * 587 + blue * 114) / 1000 >= 128 ? BLACK : WHITE;
+    }
+
+    /**
+     * @return A darker shade of the color with the same hue, for the shadow of text in that color
+     */
+    public static int shadowOf(int rgb) {
+        float[] hsb = java.awt.Color.RGBtoHSB((rgb >> 16) & 0xFF, (rgb >> 8) & 0xFF, rgb & 0xFF, null);
+        return java.awt.Color.HSBtoRGB(hsb[0], hsb[1], hsb[2] * SHADOW_BRIGHTNESS) & 0xFFFFFF;
     }
 
     /**

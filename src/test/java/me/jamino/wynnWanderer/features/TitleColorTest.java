@@ -17,6 +17,22 @@ class TitleColorTest {
     }
 
     @Test
+    void shadowIsADarkerShadeOfTheSameHue() {
+        int shadow = TitleColor.shadowOf(0xFFCC00);
+        // Darker, but not black, and still yellowish: red and green stay well above blue
+        assertTrue(shadow != TitleColor.BLACK);
+        assertTrue(((shadow >> 16) & 0xFF) < 0xFF && ((shadow >> 8) & 0xFF) < 0xCC);
+        assertTrue(((shadow >> 16) & 0xFF) > 0 && ((shadow >> 8) & 0xFF) > 0);
+        assertEquals(0, shadow & 0xFF);
+        // No alpha bits are added
+        assertEquals(0, shadow >>> 24);
+        // Shades of grey stay grey
+        int grey = TitleColor.shadowOf(0xFFFFFF);
+        assertEquals((grey >> 16) & 0xFF, grey & 0xFF);
+        assertTrue((grey & 0xFF) < 0xFF);
+    }
+
+    @Test
     void parsesHexColors() {
         assertEquals(0xFFCC00, TitleColor.parse("ffcc00", TitleColor.WHITE));
         assertEquals(0xFFCC00, TitleColor.parse("FFCC00", TitleColor.WHITE));

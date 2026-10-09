@@ -157,6 +157,10 @@ public class TerritoryTitleCore {
             // Only the background has a shadow, which would otherwise be drawn over it
             if (segment.foreground()) {
                 style = style.withoutShadow();
+            } else {
+                // A darker shade of the text's own color rather than black. The alpha is left opaque, as
+                // the fade of the text is applied to the shadow as well.
+                style = style.withShadowColor(0xFF000000 | TitleColor.shadowOf(segment.color()));
             }
 
             component.append(Component.literal(segment.text()).withStyle(style));
