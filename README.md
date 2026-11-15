@@ -15,7 +15,7 @@ WynnWanderer is a Minecraft mod that pops up a title when you cross into a new t
 - Configurable fade in, display, fade out and cooldown times
 - Remembers the last few territories you visited so it doesn't spam you when you stand on a border
 - Works with custom title resource packs, see the [resource pack guide](https://github.com/DrBiznes/wynn-wanderer/blob/master/docs/RESOURCE_PACKS.md) to make your own
-- Configurable settings via Mod Menu or config file
+- Configurable settings via Mod Menu or the config file, Cloth Config and Mod Menu are optional
 
 ## See It
 
@@ -28,14 +28,14 @@ Colors come from the city, so Ragni is red and Corkus City is yellow like you'd 
 ## Installation
 
 1. Make sure you have Fabric Loader and Fabric API installed
-2. Download and install Wynntils and Cloth Config
+2. Download and install Wynntils, and optionally Cloth Config and Mod Menu for the config screen
 3. Download the latest version of WynnWanderer from the versions page
 4. Place the downloaded .jar file in your Minecraft mods folder
 5. Wander
 
 ## Configuration
 
-You can configure WynnWanderer using Mod Menu. The position of the title and subtitle is set in the "Position Settings" section, and "Show Only Significant Territories" is the one to turn off if you want a title for every territory and not just the cities.
+You can configure WynnWanderer using Mod Menu if you have Cloth Config installed. Without them, edit `config/wynn-wanderer.toml` in your Minecraft folder and restart the game. The position of the title and subtitle is set in the "Position Settings" section, and "Show Only Significant Territories" is the one to turn off if you want a title for every territory and not just the cities.
 
 ## Requirements
 
@@ -43,8 +43,7 @@ You can configure WynnWanderer using Mod Menu. The position of the title and sub
 - Fabric Loader 0.19.5 or higher
 - Fabric API
 - Wynntils 4.2.13 or higher
-- Cloth Config
-- Mod Menu (optional, it's how you get to the config screen)
+- Cloth Config and Mod Menu (optional, they add the config screen)
 
 ## Custom Titles
 
@@ -60,6 +59,7 @@ Want your own title art? WynnWanderer picks up resource packs that replace any c
 ./gradlew build              # builds the mod and runs the unit tests
 ./gradlew test               # unit tests only
 ./gradlew runClientGameTest  # in-game smoke tests
+./gradlew runClientGameTest -PwithoutConfigScreen  # in-game smoke tests without Cloth Config and Mod Menu
 ```
 
 - **Unit tests** (`src/test`) cover the title logic that does not need the game: animation timing, territory tracking, title placement, title and color selection, and the language and mod metadata files.

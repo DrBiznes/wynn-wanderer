@@ -1,11 +1,15 @@
 package me.jamino.wynnWanderer.config;
 
-import me.shedaniel.autoconfig.ConfigData;
-import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 
-@Config(name = "wynn-wanderer")
-public class WynnWandererConfig implements ConfigData {
+/**
+ * The settings of the mod, saved to config/wynn-wanderer.toml by {@link ConfigFile}.
+ * <p>
+ * Cloth Config is optional, so nothing here may depend on it at runtime. The {@link ConfigEntry} annotations are
+ * only read by the config screen and are ignored by Java when Cloth Config is not installed. Fields added here
+ * must also be added to {@link me.jamino.wynnWanderer.config.gui.ClothConfigData}.
+ */
+public class WynnWandererConfig {
     @ConfigEntry.Gui.CollapsibleObject
     @ConfigEntry.Gui.Tooltip
     public TerritoryTitlesConfig territoryTitles = new TerritoryTitlesConfig();

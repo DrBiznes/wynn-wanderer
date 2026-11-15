@@ -44,9 +44,20 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // YAH YAH MOD MENU
-    modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
-
-    modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
+    // Mod Menu and Cloth Config are optional, they only add the config screen. Without them the settings are
+    // read from config/wynn-wanderer.toml. Run with -PwithoutConfigScreen to test the mod without them.
+    modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
+    modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
+    if (!project.hasProperty("withoutConfigScreen")) {
+        modLocalRuntime "com.terraformersmc:modmenu:${project.modmenu_version}"
+        modLocalRuntime("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
+            exclude(group: "net.fabricmc.fabric-api")
+        }
+    }
+    // The unit tests read the config annotations
+    testImplementation("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
     // VERY IMPORTANT WYNNTILS!!!

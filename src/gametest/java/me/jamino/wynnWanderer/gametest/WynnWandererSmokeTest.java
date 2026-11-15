@@ -1,10 +1,16 @@
 package me.jamino.wynnWanderer.gametest;
 
 import com.wynntils.core.components.Models;
+import java.io.IOException;
+import java.nio.file.Files;
 import me.jamino.wynnWanderer.WynnWanderer;
+import me.jamino.wynnWanderer.config.ConfigFile;
 import me.jamino.wynnWanderer.config.WynnWandererConfig;
+import me.jamino.wynnWanderer.config.gui.ClothConfigData;
+import me.jamino.wynnWanderer.config.gui.ClothConfigScreen;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.ConfigHolder;
 import me.jamino.wynnWanderer.features.TerritoryTitleCore;
-import me.shedaniel.autoconfig.AutoConfigClient;
 import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
 import net.fabricmc.fabric.api.client.gametest.v1.context.TestSingleplayerContext;
@@ -34,11 +40,41 @@ public class WynnWandererSmokeTest implements FabricClientGameTest {
     }
 
     private void configScreenOpens(ClientGameTestContext context) {
-        context.setScreen(() -> AutoConfigClient.getConfigScreen(WynnWandererConfig.class, null)
-                .get());
+        context.runOnClient(client -> check(Files.exists(WynnWanderer.getConfigPath()), "The config file was not written"));
+        if (!WynnWanderer.isClothConfigLoaded()) {
+            // The mod has to work without Cloth Config, it just has no config screen then
+            return;
+        }
+        context.setScreen(() -> ClothConfigScreen.create(null));
         context.waitTicks(5);
         context.takeScreenshot("wynn-wanderer-config");
+        context.runOnClient(client -> ClothChecks.savingWritesTheConfigFile());
         context.setScreen(() -> null);
+    }
+
+    /** Kept apart so the test class itself still loads when Cloth Config is not installed. */
+    private static class ClothChecks {
+        static void savingWritesTheConfigFile() {
+            ConfigHolder<ClothConfigData> holder = AutoConfig.getConfigHolder(ClothConfigData.class);
+            WynnWandererConfig.TerritoryTitlesConfig.AnimationConfig animation = holder.getConfig().territoryTitles.animation;
+            int cooldown = animation.textCooldownTime;
+            try {
+                // This is what the Save button does after copying the edited values into the config
+                animation.textCooldownTime = 1234;
+                holder.save();
+
+                WynnWandererConfig saved = new WynnWandererConfig();
+                ConfigFile.read(WynnWanderer.getConfigPath(), saved);
+                check(saved.territoryTitles.animation.textCooldownTime == 1234, "Saving the config screen did not write the file");
+                check(WynnWanderer.getConfig().territoryTitles.animation.textCooldownTime == 1234,
+                        "Saving the config screen did not change the live config");
+            } catch (IOException e) {
+                throw new AssertionError("Could not read the config file", e);
+            } finally {
+                animation.textCooldownTime = cooldown;
+                holder.save();
+            }
+        }
     }
 
     private void titlesRenderInWorld(ClientGameTestContext context) {

@@ -29,10 +29,21 @@ class ModMetadataTest {
     void dependsOnEverythingTheModUses() {
         JsonObject depends = modJson.getAsJsonObject("depends");
 
-        for (String dependency : List.of("fabricloader", "fabric", "minecraft", "cloth-config", "wynntils")) {
+        for (String dependency : List.of("fabricloader", "fabric", "minecraft", "wynntils")) {
             assertTrue(depends.has(dependency), "Missing dependency on " + dependency);
         }
         assertTrue(depends.get("minecraft").getAsString().startsWith("1.21.11"));
+    }
+
+    @Test
+    void configScreenModsAreOptional() {
+        JsonObject depends = modJson.getAsJsonObject("depends");
+        JsonObject suggests = modJson.getAsJsonObject("suggests");
+
+        for (String dependency : List.of("cloth-config", "modmenu")) {
+            assertFalse(depends.has(dependency), dependency + " must not be required");
+            assertTrue(suggests.has(dependency), "Missing suggestion for " + dependency);
+        }
     }
 
     @Test
