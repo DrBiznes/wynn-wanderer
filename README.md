@@ -56,14 +56,16 @@ Want your own title art? WynnWanderer picks up resource packs that replace any c
 - It needs JDK 21 and the official Mojang mappings
 
 ```
-./gradlew build              # builds the mod and runs the unit tests
+./gradlew build              # builds the mod and runs the unit and resource pack tests
 ./gradlew test               # unit tests only
+./gradlew testWynncraftPack  # checks the titles against the latest Wynncraft resource pack
 ./gradlew runClientGameTest  # in-game smoke tests
 ./gradlew runClientGameTest -PwithoutConfigScreen  # in-game smoke tests without Cloth Config and Mod Menu
 ```
 
 - **Unit tests** (`src/test`) cover the title logic that does not need the game: animation timing, territory tracking, title placement, title and color selection, and the language and mod metadata files.
 - **Smoke tests** (`src/gametest`) start a real client with Wynntils installed and check that the mod loads, the config screen opens, and titles render where the config says. Screenshots are saved to `build/run/clientGameTest/screenshots`.
+- **Resource pack tests** (`WynncraftPackTest`) lay out the city titles with the glyphs of the real Wynncraft resource pack and check that the fonts and glyphs the titles use are still there, to catch Wynncraft pack updates that break them. Wynncraft only serves its pack to the Minecraft client, so they use the newest pack a launcher on your machine downloaded (join Wynncraft once to get the latest), found through Minecraft's `downloads/log.json`, and check its SHA-1 against the one the server sent. They are skipped when there is no pack, like in CI. Pass `-PwynncraftPack=<zip>` to test a specific file, `-PwynncraftPackSha1=<sha1>` for an older version from the launcher downloads, `-PwynncraftPackDirs=<game dir>` for a launcher that is not found on its own, and `-PrequireWynncraftPack` to fail instead of skipping.
 - The Wynntils version the mod is built against is set in `gradle.properties`.
 - The banner and images above are made by `marketing/make_images.py`
 

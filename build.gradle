@@ -108,12 +108,48 @@ java {
     withSourcesJar()
 }
 
-test {
-    useJUnitPlatform()
+tasks.withType(Test).configureEach {
     testLogging {
         events "passed", "skipped", "failed"
         exceptionFormat = "full"
     }
+}
+
+test {
+    useJUnitPlatform {
+        excludeTags "wynncraft-pack"
+    }
+}
+
+// Checks the mod against the newest Wynncraft resource pack a launcher on this machine downloaded (its SHA-1 is
+// verified against the one the server sent). Skipped when there is none, like in CI. See WynncraftPack for the
+// -PwynncraftPack, -PwynncraftPackSha1, -PwynncraftPackDirs and -PrequireWynncraftPack options.
+def testWynncraftPack = tasks.register("testWynncraftPack", Test) {
+    description = "Checks the mod against the latest Wynncraft resource pack."
+    group = "verification"
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    useJUnitPlatform {
+        includeTags "wynncraft-pack"
+    }
+    // Shows which pack was tested
+    testLogging.showStandardStreams = true
+    // The pack is found outside of the project, so Gradle cannot tell when a new one was downloaded
+    outputs.upToDateWhen { false }
+
+    ["wynncraftPack", "wynncraftPackSha1", "wynncraftPackDirs"].each { name ->
+        if (project.hasProperty(name)) {
+            systemProperty "wynnWanderer.${name}", project.property(name).toString()
+        }
+    }
+    if (project.hasProperty("requireWynncraftPack")) {
+        def value = project.property("requireWynncraftPack").toString()
+        systemProperty "wynnWanderer.requireWynncraftPack", value.isEmpty() ? "true" : value
+    }
+}
+
+tasks.named("check") {
+    dependsOn testWynncraftPack
 }
 
 jar {
