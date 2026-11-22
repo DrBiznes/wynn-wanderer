@@ -125,7 +125,8 @@ In `assets/minecraft/font/default.json`:
 
 These all have a title already, so these are the ones to replace:
 
-- Llevigar, Gelibord, Olux, Rodoroc, Eltom, Cinfras, Ahmsord
+- Llevigar, Gelibord, Olux, Rodoroc, Thanos, Eltom, Cinfras, Ahmsord
 - Kandon-Beda, Thesead, Corkus City, Selchar, Nemract, Almuj
 - Ragni, Detlas, Lutho, Nesaak, Troms, Alekin
+- Towns: Bucie (shown on the Entrance to Bucie territory), Bremminglar, Rymek, Ternaves, Lusuco, Maltic
 - Fruma: Fort Torann, Espren, Timasca, Aldwell, Hyloch

@@ -105,9 +105,9 @@
 
   "wynn_wanderer.territory.llevigar.title": "\u00a7{minecraft:banner/pill}\ue060\udaff\udfff\ue03b\udaff\udfff\ue03b\udaff\udfff\ue034\udaff\udfff\ue045\udaff\udfff\ue038\udaff\udfff\ue036\udaff\udfff\ue030\udaff\udfff\ue041\udaff\udfff\ue062\udaff\udfd0\u00a7t\ue00b\ue00b\ue004\ue015\ue008\ue006\ue000\ue011\udb00\udc01",
   "wynn_wanderer.territory.llevigar.subtitle": "\u00a7{minecraft:language/five}Gateway to Gavel",
-  "wynn_wanderer.territory.llevigar.color": "996633",
-  "wynn_wanderer.territory.llevigar.text_color": "f0e8e0",
-  "wynn_wanderer.territory.llevigar.subtitle_color": "f0e8e0",
+  "wynn_wanderer.territory.llevigar.color": "f0ece2",
+  "wynn_wanderer.territory.llevigar.text_color": "111111",
+  "wynn_wanderer.territory.llevigar.subtitle_color": "f0ece2",
 
   "wynn_wanderer.territory.gelibord.title": "\u00a7{minecraft:banner/pill}\ue060\udaff\udfff\ue036\udaff\udfff\ue034\udaff\udfff\ue03b\udaff\udfff\ue038\udaff\udfff\ue031\udaff\udfff\ue03e\udaff\udfff\ue041\udaff\udfff\ue033\udaff\udfff\ue062\udaff\udfd0\u00a7t\ue006\ue004\ue00b\ue008\ue001\ue00e\ue011\ue003\udb00\udc01",
   "wynn_wanderer.territory.gelibord.subtitle": "\u00a7{minecraft:language/five}Small Town in the Decay's Shadow",
@@ -123,9 +123,15 @@
 
   "wynn_wanderer.territory.rodoroc.title": "\u00a7{minecraft:banner/pill}\ue060\udaff\udfff\ue041\udaff\udfff\ue03e\udaff\udfff\ue033\udaff\udfff\ue03e\udaff\udfff\ue041\udaff\udfff\ue03e\udaff\udfff\ue032\udaff\udfff\ue062\udaff\udfd4\u00a7t\ue011\ue00e\ue003\ue00e\ue011\ue00e\ue002\udb00\udc01",
   "wynn_wanderer.territory.rodoroc.subtitle": "\u00a7{minecraft:language/five}Dwarven Capital of Molten Heights",
-  "wynn_wanderer.territory.rodoroc.color": "7c6353",
-  "wynn_wanderer.territory.rodoroc.text_color": "ebe8e5",
-  "wynn_wanderer.territory.rodoroc.subtitle_color": "ebe8e5",
+  "wynn_wanderer.territory.rodoroc.color": "3a2a26",
+  "wynn_wanderer.territory.rodoroc.text_color": "ff7a1a",
+  "wynn_wanderer.territory.rodoroc.subtitle_color": "ff7a1a",
+
+  "wynn_wanderer.territory.thanos.title": "\u00a7{minecraft:banner/pill}\ue060\udaff\udfff\ue043\udaff\udfff\ue037\udaff\udfff\ue030\udaff\udfff\ue03d\udaff\udfff\ue03e\udaff\udfff\ue042\udaff\udfff\ue062\udaff\udfda\u00a7t\ue013\ue007\ue000\ue00d\ue00e\ue012\udb00\udc01",
+  "wynn_wanderer.territory.thanos.subtitle": "\u00a7{minecraft:language/five}Dwarven Forge Town of the Heights",
+  "wynn_wanderer.territory.thanos.color": "d9531e",
+  "wynn_wanderer.territory.thanos.text_color": "2a1208",
+  "wynn_wanderer.territory.thanos.subtitle_color": "d9531e",
 
   "wynn_wanderer.territory.eltom.title": "\u00a7{minecraft:banner/pill}\ue060\udaff\udfff\ue034\udaff\udfff\ue03b\udaff\udfff\ue043\udaff\udfff\ue03e\udaff\udfff\ue03c\udaff\udfff\ue062\udaff\udfe0\u00a7t\ue004\ue00b\ue013\ue00e\ue00c\udb00\udc01",
   "wynn_wanderer.territory.eltom.subtitle": "\u00a7{minecraft:language/five}The Hidden City of Humans",
@@ -177,9 +183,9 @@
 
   "wynn_wanderer.territory.lutho.title": "\u00a7{minecraft:banner/pill}\ue060\udaff\udfff\ue03b\udaff\udfff\ue044\udaff\udfff\ue043\udaff\udfff\ue037\udaff\udfff\ue03e\udaff\udfff\ue062\udaff\udfe0\u00a7t\ue00b\ue014\ue013\ue007\ue00e\udb00\udc01",
   "wynn_wanderer.territory.lutho.subtitle": "\u00a7{minecraft:language/five}Beacon of Hope in the Silent Expanse",
-  "wynn_wanderer.territory.lutho.color": "7f6b3a",
-  "wynn_wanderer.territory.lutho.text_color": "ece9e1",
-  "wynn_wanderer.territory.lutho.subtitle_color": "ece9e1",
+  "wynn_wanderer.territory.lutho.color": "2a1a3a",
+  "wynn_wanderer.territory.lutho.text_color": "ffffff",
+  "wynn_wanderer.territory.lutho.subtitle_color": "ffffff",
 
   "wynn_wanderer.territory.nesaak.title": "\u00a7{minecraft:banner/pill}\ue060\udaff\udfff\ue03d\udaff\udfff\ue034\udaff\udfff\ue042\udaff\udfff\ue030\udaff\udfff\ue030\udaff\udfff\ue03a\udaff\udfff\ue062\udaff\udfda\u00a7t\ue00d\ue004\ue012\ue000\ue000\ue00a\udb00\udc01",
   "wynn_wanderer.territory.nesaak.subtitle": "\u00a7{minecraft:language/five}Fishing Town of the Frozen Forest",
@@ -198,6 +204,42 @@
   "wynn_wanderer.territory.troms.color": "a3c5e0",
   "wynn_wanderer.territory.troms.text_color": "2e373f",
   "wynn_wanderer.territory.troms.subtitle_color": "a3c5e0",
+
+  "wynn_wanderer.territory.bucie.title": "\u00a7{minecraft:banner/pill}\ue060\udaff\udfff\ue031\udaff\udfff\ue044\udaff\udfff\ue032\udaff\udfff\ue038\udaff\udfff\ue034\udaff\udfff\ue062\udaff\udfe2\u00a7t\ue001\ue014\ue002\ue008\ue004\udb00\udc01",
+  "wynn_wanderer.territory.bucie.subtitle": "\u00a7{minecraft:language/five}Farmers' Crossing on the River Sage",
+  "wynn_wanderer.territory.bucie.color": "9caf88",
+  "wynn_wanderer.territory.bucie.text_color": "263020",
+  "wynn_wanderer.territory.bucie.subtitle_color": "9caf88",
+
+  "wynn_wanderer.territory.bremminglar.title": "\u00a7{minecraft:banner/pill}\ue060\udaff\udfff\ue031\udaff\udfff\ue041\udaff\udfff\ue034\udaff\udfff\ue03c\udaff\udfff\ue03c\udaff\udfff\ue038\udaff\udfff\ue03d\udaff\udfff\ue036\udaff\udfff\ue03b\udaff\udfff\ue030\udaff\udfff\ue041\udaff\udfff\ue062\udaff\udfbe\u00a7t\ue001\ue011\ue004\ue00c\ue00c\ue008\ue00d\ue006\ue00b\ue000\ue011\udb00\udc01",
+  "wynn_wanderer.territory.bremminglar.subtitle": "\u00a7{minecraft:language/five}Tribal Home of a Savannah Sorcerer",
+  "wynn_wanderer.territory.bremminglar.color": "e0b040",
+  "wynn_wanderer.territory.bremminglar.text_color": "2b2a28",
+  "wynn_wanderer.territory.bremminglar.subtitle_color": "e0b040",
+
+  "wynn_wanderer.territory.rymek.title": "\u00a7{minecraft:banner/pill}\ue060\udaff\udfff\ue041\udaff\udfff\ue048\udaff\udfff\ue03c\udaff\udfff\ue034\udaff\udfff\ue03a\udaff\udfff\ue062\udaff\udfe0\u00a7t\ue011\ue018\ue00c\ue004\ue00a\udb00\udc01",
+  "wynn_wanderer.territory.rymek.subtitle": "\u00a7{minecraft:language/five}Gold-Trading Bandit Town of the Mesa",
+  "wynn_wanderer.territory.rymek.color": "b5532f",
+  "wynn_wanderer.territory.rymek.text_color": "f2c14e",
+  "wynn_wanderer.territory.rymek.subtitle_color": "f2c14e",
+
+  "wynn_wanderer.territory.ternaves.title": "\u00a7{minecraft:banner/pill}\ue060\udaff\udfff\ue043\udaff\udfff\ue034\udaff\udfff\ue041\udaff\udfff\ue03d\udaff\udfff\ue030\udaff\udfff\ue045\udaff\udfff\ue034\udaff\udfff\ue042\udaff\udfff\ue062\udaff\udfce\u00a7t\ue013\ue004\ue011\ue00d\ue000\ue015\ue004\ue012\udb00\udc01",
+  "wynn_wanderer.territory.ternaves.subtitle": "\u00a7{minecraft:language/five}Quiet Horse Ranch",
+  "wynn_wanderer.territory.ternaves.color": "7a4a26",
+  "wynn_wanderer.territory.ternaves.text_color": "f0e2c8",
+  "wynn_wanderer.territory.ternaves.subtitle_color": "f0e2c8",
+
+  "wynn_wanderer.territory.lusuco.title": "\u00a7{minecraft:banner/pill}\ue060\udaff\udfff\ue03b\udaff\udfff\ue044\udaff\udfff\ue042\udaff\udfff\ue044\udaff\udfff\ue032\udaff\udfff\ue03e\udaff\udfff\ue062\udaff\udfda\u00a7t\ue00b\ue014\ue012\ue014\ue002\ue00e\udb00\udc01",
+  "wynn_wanderer.territory.lusuco.subtitle": "\u00a7{minecraft:language/five}Frozen Mining Town of the Ice Canyon",
+  "wynn_wanderer.territory.lusuco.color": "dceef5",
+  "wynn_wanderer.territory.lusuco.text_color": "1f3440",
+  "wynn_wanderer.territory.lusuco.subtitle_color": "dceef5",
+
+  "wynn_wanderer.territory.maltic.title": "\u00a7{minecraft:banner/pill}\ue060\udaff\udfff\ue03c\udaff\udfff\ue030\udaff\udfff\ue03b\udaff\udfff\ue043\udaff\udfff\ue038\udaff\udfff\ue032\udaff\udfff\ue062\udaff\udfdc\u00a7t\ue00c\ue000\ue00b\ue013\ue008\ue002\udb00\udc01",
+  "wynn_wanderer.territory.maltic.subtitle": "\u00a7{minecraft:language/five}First Villager Settlement in Wynn",
+  "wynn_wanderer.territory.maltic.color": "e3cf8f",
+  "wynn_wanderer.territory.maltic.text_color": "3b2f17",
+  "wynn_wanderer.territory.maltic.subtitle_color": "e3cf8f",
 
   "wynn_wanderer.territory.fort_torann.title": "\u00a7{minecraft:banner/pill}\ue060\udaff\udfff\ue035\udaff\udfff\ue03e\udaff\udfff\ue041\udaff\udfff\ue043\udaff\udfff\ue061\udaff\udfff\ue043\udaff\udfff\ue03e\udaff\udfff\ue041\udaff\udfff\ue030\udaff\udfff\ue03d\udaff\udfff\ue03d\udaff\udfff\ue062\udaff\udfbe\u00a7t\ue005\ue00e\ue011\ue013 \ue013\ue00e\ue011\ue000\ue00d\ue00d\udb00\udc01",
   "wynn_wanderer.territory.fort_torann.subtitle": "\u00a7{minecraft:language/five}Fortress Gateway of Fruma",

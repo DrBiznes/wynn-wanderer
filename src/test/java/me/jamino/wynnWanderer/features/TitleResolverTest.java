@@ -63,6 +63,17 @@ class TitleResolverTest {
     }
 
     @Test
+    void territoriesStandingForACityUseTheTitleOfTheCity() {
+        // There is no Bucie territory, only the entrance to it
+        ResolvedTitle title = TitleResolver.resolve("Entrance to Bucie", config, lang::get);
+
+        assertTrue(title.significant());
+        assertEquals("wynn_wanderer.territory.bucie.title", title.titleKey());
+        assertEquals("wynn_wanderer.territory.bucie.subtitle", title.subtitleKey());
+        assertEquals(0x9CAF88, title.color());
+    }
+
+    @Test
     void regularTerritoriesUseTheEnteringTitleAndTextColor() {
         config.appearance.textColor = "abcdef";
 
