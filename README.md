@@ -2,12 +2,12 @@
 
 <img width="468" height="200" alt="banner" src="https://github.com/user-attachments/assets/93f9c0cf-fada-47df-8b74-89195533a734" />
 
-WynnWanderer is a Minecraft mod that pops up a title when you cross into a new territory on Wynncraft, with the full Wynncraft font treatment for all 24 major cities from Ragni to Hyloch. Made for my modpack [World of Wynncraft](https://modrinth.com/modpack/world-of-wynncraft), inspired by [Traveler's Titles](https://www.curseforge.com/minecraft/mc-mods/travelers-titles)
+WynnWanderer is a Minecraft mod that pops up a title when you cross into a new territory on Wynncraft, with the full Wynncraft font treatment for all 24 major cities from Ragni to Hyloch. Made for my modpack [World of Wynncraft](https://modrinth.com/modpack/world-of-wynncraft), inspired by [Traveler's Titles](https://www.curseforge.com/minecraft/mc-mods/travelers-titles), WoW and Skyrim.
 
 ## What's Up
 
 - Shows a title when you cross a territory border, using the territory data from Wynntils
-- Pill titles for all **24 major cities**, including the Fruma ones, each in its own city color
+- Pill titles for all **major cities, towns, and villages**, including the Fruma ones, each in its own city color
 - Everywhere else gets a plain "Entering ..." title, or turn that off and only get the cities
 - Subtitles for the cities, which you can turn off
 - Configurable text size, color and shadow
@@ -15,11 +15,11 @@ WynnWanderer is a Minecraft mod that pops up a title when you cross into a new t
 - Configurable fade in, display, fade out and cooldown times
 - Remembers the last few territories you visited so it doesn't spam you when you stand on a border
 - Works with custom title resource packs, see the [resource pack guide](https://github.com/DrBiznes/wynn-wanderer/blob/master/docs/RESOURCE_PACKS.md) to make your own
-- Configurable settings via Mod Menu or the config file, Cloth Config and Mod Menu are optional
+- Configurable settings via Mod Menu or config file
 
 ## See It
 
-Every city title in the mod:
+Some city titles in the mod:
 
 <img width="1010" height="436" alt="gallery" src="https://github.com/user-attachments/assets/596c0ef8-cf17-4049-b56c-39fc697c20db" />
 
@@ -28,14 +28,14 @@ Colors come from the city, so Ragni is red and Corkus City is yellow like you'd 
 ## Installation
 
 1. Make sure you have Fabric Loader and Fabric API installed
-2. Download and install Wynntils, and optionally Cloth Config and Mod Menu for the config screen
+2. Download and install Wynntils and Cloth Config
 3. Download the latest version of WynnWanderer from the versions page
 4. Place the downloaded .jar file in your Minecraft mods folder
 5. Wander
 
 ## Configuration
 
-You can configure WynnWanderer using Mod Menu if you have Cloth Config installed. Without them, edit `config/wynn-wanderer.toml` in your Minecraft folder and restart the game. The position of the title and subtitle is set in the "Position Settings" section, and "Show Only Significant Territories" is the one to turn off if you want a title for every territory and not just the cities.
+You can configure WynnWanderer using Mod Menu. The position of the title and subtitle is set in the "Position Settings" section, and "Show Only Significant Territories" is the one to turn off if you want a title for every territory and not just the cities.
 
 ## Requirements
 
@@ -43,7 +43,8 @@ You can configure WynnWanderer using Mod Menu if you have Cloth Config installed
 - Fabric Loader 0.19.5 or higher
 - Fabric API
 - Wynntils 4.2.13 or higher
-- Cloth Config and Mod Menu (optional, they add the config screen)
+- Cloth Config
+- Mod Menu (optional, it's how you get to the config screen)
 
 ## Custom Titles
 
@@ -53,21 +54,6 @@ Want your own title art? WynnWanderer picks up resource packs that replace any c
 
 - I don't know nothing about java so if you wanna fork this and fix this up go ham.
 - Feel free to use this in your modpack
-- It needs JDK 21 and the official Mojang mappings
-
-```
-./gradlew build              # builds the mod and runs the unit and resource pack tests
-./gradlew test               # unit tests only
-./gradlew testWynncraftPack  # checks the titles against the latest Wynncraft resource pack
-./gradlew runClientGameTest  # in-game smoke tests
-./gradlew runClientGameTest -PwithoutConfigScreen  # in-game smoke tests without Cloth Config and Mod Menu
-```
-
-- **Unit tests** (`src/test`) cover the title logic that does not need the game: animation timing, territory tracking, title placement, title and color selection, and the language and mod metadata files.
-- **Smoke tests** (`src/gametest`) start a real client with Wynntils installed and check that the mod loads, the config screen opens, and titles render where the config says. Screenshots are saved to `build/run/clientGameTest/screenshots`.
-- **Resource pack tests** (`WynncraftPackTest`) lay out the city titles with the glyphs of the real Wynncraft resource pack and check that the fonts and glyphs the titles use are still there, to catch Wynncraft pack updates that break them. Wynncraft only serves its pack to the Minecraft client, so they use the newest pack a launcher on your machine downloaded (join Wynncraft once to get the latest), found through Minecraft's `downloads/log.json`, and check its SHA-1 against the one the server sent. They are skipped when there is no pack, like in CI. Pass `-PwynncraftPack=<zip>` to test a specific file, `-PwynncraftPackSha1=<sha1>` for an older version from the launcher downloads, `-PwynncraftPackDirs=<game dir>` for a launcher that is not found on its own, and `-PrequireWynncraftPack` to fail instead of skipping.
-- The Wynntils version the mod is built against is set in `gradle.properties`.
-- The banner and images above are made by `marketing/make_images.py`
 
 ## Acknowledgments
 
