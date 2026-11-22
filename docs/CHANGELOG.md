@@ -2,8 +2,16 @@
 
 ## 0.1.1
 
+### Added
+
+- Pill titles for Thanos and six towns: Bucie, Bremminglar, Rymek, Ternaves, Lusuco and Maltic, each with its own subtitle and colors. Thanos gets a molten orange pill to match Rodoroc
+- Bucie's title shows when you enter the Entrance to Bucie territory
+
 ### Changed
 
+- Llevigar now has an off-white pill with black text
+- Rodoroc now has a dark basalt pill with lava-orange text
+- Lutho now has a dark purple pill with white text
 - Cloth Config and Mod Menu are now optional. WynnWanderer runs with just Fabric API and Wynntils
 - Without Cloth Config, the settings come from `config/wynn-wanderer.toml`. Edit the file and restart the game to apply the changes
 - With Cloth Config and Mod Menu installed, the config screen works the same as before and saves to the same file
