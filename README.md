@@ -2,7 +2,7 @@
 
 <img width="468" height="200" alt="banner" src="https://github.com/user-attachments/assets/93f9c0cf-fada-47df-8b74-89195533a734" />
 
-WynnWanderer is a Minecraft mod that pops up a title when you cross into a new territory on Wynncraft, with the full Wynncraft font treatment for all 24 major cities from Ragni to Hyloch. Made for my modpack [World of Wynncraft](https://modrinth.com/modpack/world-of-wynncraft), inspired by [Traveler's Titles](https://www.curseforge.com/minecraft/mc-mods/travelers-titles), WoW and Skyrim.
+WynnWanderer is a Minecraft mod that pops up a title when you cross into a new territory on Wynncraft, with the full Wynncraft font treatment for all major cities from Ragni to Hyloch. Made for my modpack [World of Wynncraft](https://modrinth.com/modpack/world-of-wynncraft), inspired by [Traveler's Titles](https://www.curseforge.com/minecraft/mc-mods/travelers-titles), WoW and Skyrim.
 
 ## What's Up
 
